@@ -101,7 +101,7 @@ Product addProduct(string_view login)
     cout << "Введите название продукта: ";
     string name;
     _flushall();
-    getline(cin,name);
+    std:: getline(cin,name);
     printCategories();
     cout << "Выберите категорию продукта: ";
     int category;
@@ -116,7 +116,7 @@ Product addProduct(string_view login)
     cout << "Создайте описание товара: ";
     string descriprion;
     _flushall();
-    getline(cin,descriprion);
+    std::getline(cin,descriprion);
     int id = rand() % 999999 + 1;
     Product product(name,category,subcategory,price,descriprion,id,login);
     return product;
