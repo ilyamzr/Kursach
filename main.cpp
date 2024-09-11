@@ -3,6 +3,7 @@
 #include <windows.h>
 #include <array>
 #include <vector>
+#include <string>
 
 using namespace std;
 
