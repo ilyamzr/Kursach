@@ -27,3 +27,5 @@ void viewProducts(const std::string &login, const std::string &filename, int mod
 void updateProductsInfo(const std::vector<Product>& products, const std::string& filename);
 void deleteProduct(const std::string& filename, int deleteNum);
 void addProductFunc(const std::string& login, const std::string& filename);
+void deleteProductFunc(const std::string& login, const std::string& filename);
+void categoriesFunc(const std::string& login, const std::string& filename);

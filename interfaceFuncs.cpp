@@ -22,11 +22,7 @@ void sellerMode(const string& login, const string& filename)
         }
         else if (choice == 3)
         {
-            viewProducts(login,filename,1);
-            cout << "Выберите товар, который хотите удалить";
-            int deletedNum;
-            cin >> deletedNum;
-            deleteProduct(filename,deletedNum);
+            deleteProductFunc(login,filename);
         }
     }
 }
@@ -38,11 +34,7 @@ void buyermode(const string &login, const string &filename)
     cin >> choice;
     if (choice == 1)
     {
-        printCategories();
-        int category;
-        cin >> category;
-        printSubCategories(category);
-        viewProducts(login,filename,0);
+        categoriesFunc(login,filename);
     }
     else if (choice == 2)
     {

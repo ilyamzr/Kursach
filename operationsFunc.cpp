@@ -159,3 +159,21 @@ void addProductFunc(const string& login, const string& filename)
     Product newProduct = addProduct(login);
     Product::saveProductToFile(newProduct, filename);
 }
+
+void deleteProductFunc(const string& login, const string& filename)
+{
+    viewProducts(login,filename,1);
+    cout << "Выберите товар, который хотите удалить";
+    int deletedNum;
+    cin >> deletedNum;
+    deleteProduct(filename,deletedNum);
+}
+
+void categoriesFunc(const string& login, const string& filename)
+{
+    printCategories();
+    int category;
+    cin >> category;
+    printSubCategories(category);
+    viewProducts(login,filename,0);
+}
