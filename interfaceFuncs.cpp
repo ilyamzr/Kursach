@@ -32,7 +32,7 @@ void buyermode(const string &login, const string &filename)
     cout << "Выберите действие:\n1) Категории \n2) Все товары \n3) Профиль \n4) Назад";
     int choice;
     cin >> choice;
-    if (choice == 1)
+    if (choice == 1) 
     {
         categoriesFunc(login,filename);
     }
