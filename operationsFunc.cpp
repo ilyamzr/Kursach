@@ -100,7 +100,7 @@ Product addProduct(string_view login)
     return product;
 }
 
-void viewProducts(const string &login, const string &filename, int mode)
+void viewProducts(const string_view &login, const string &filename, int mode)
 {
     ifstream file(filename);
     if (!file.is_open()) {
@@ -143,8 +143,7 @@ void deleteProduct(const string& filename, int deleteNum) {
         while (file.good()) {
             string line;
             getline(file,line);
-            Product product = Product::readFromFile(line);
-            if (count != deleteNum && !product.name.empty()) {
+            if (Product product = Product::readFromFile(line); count != deleteNum && !product.name.empty()) {
                 products.push_back(product);
             }
             count++;
@@ -154,13 +153,13 @@ void deleteProduct(const string& filename, int deleteNum) {
     updateProductsInfo(products, filename);
 }
 
-void addProductFunc(const string& login, const string& filename)
+void addProductFunc(const string_view& login, const string& filename)
 {
     Product newProduct = addProduct(login);
     Product::saveProductToFile(newProduct, filename);
 }
 
-void deleteProductFunc(const string& login, const string& filename)
+void deleteProductFunc(const string_view& login, const string& filename)
 {
     viewProducts(login,filename,1);
     cout << "Выберите товар, который хотите удалить";
@@ -169,7 +168,7 @@ void deleteProductFunc(const string& login, const string& filename)
     deleteProduct(filename,deletedNum);
 }
 
-void categoriesFunc(const string& login, const string& filename)
+void categoriesFunc(const string_view& login, const string& filename)
 {
     printCategories();
     int category;

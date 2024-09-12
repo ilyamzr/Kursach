@@ -1,13 +1,11 @@
 #include <iostream>
 #include <string>
-#include <windows.h>
 #include "interfaceFuncs.h"
 
 using namespace std;
 
 int main() {
     system("chcp 65001");
-    SetConsoleOutputCP(CP_UTF8);
     string login;
     string filename = "products.txt";
     cout << "Введите логин";
