@@ -7,7 +7,7 @@ using namespace std;
 
 void sellerMode(const string& login, const string& filename)
 {
-    int choice;
+    int choice = 0;
     while (choice != 4 && choice != 5)
     {
         cout << "Выберите действие:\n1) Добавить товар\n2) Посмотреть мои товары\n3) Удалить товар\n4) Назад\n5) Завершить";
