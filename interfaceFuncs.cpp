@@ -14,8 +14,7 @@ void sellerMode(const string& login, const string& filename)
         cin >> choice;
         if (choice == 1)
         {
-            Product newProduct = addProduct(login);
-            Product::saveProductToFile(newProduct, filename);
+            addProductFunc(login,filename);
         }
         else if (choice == 2)
         {

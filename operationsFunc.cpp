@@ -153,3 +153,9 @@ void deleteProduct(const string& filename, int deleteNum) {
     }
     updateProductsInfo(products, filename);
 }
+
+void addProductFunc(const string& login, const string& filename)
+{
+    Product newProduct = addProduct(login);
+    Product::saveProductToFile(newProduct, filename);
+}

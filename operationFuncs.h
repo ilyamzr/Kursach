@@ -1,5 +1,6 @@
 #include <iostream>
 #include <vector>
+#include <string>
 #include "interfaceFuncs.h"
 
 class Product {
@@ -25,3 +26,4 @@ Product addProduct(std::string_view login);
 void viewProducts(const std::string &login, const std::string &filename, int mode);
 void updateProductsInfo(const std::vector<Product>& products, const std::string& filename);
 void deleteProduct(const std::string& filename, int deleteNum);
+void addProductFunc(const std::string& login, const std::string& filename);
