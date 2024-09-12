@@ -64,7 +64,7 @@ public:
     static void saveProductToFile(const Product& product, const string &filename) {
         ofstream file(filename, ios::app);
         if (file.is_open()) {
-            file << product.sellerName << "/" << product.name << "/" << product.category << "/" << product.subcategory << "/" << product.price << "/" << product.description << "/" << product.id << endl;
+            file << product.sellerName << "/" << product.name << "/" << product.category << "/" << product.subcategory << "/" << product.price << "/" << product.description << "/" << product.id << "/" << endl;
             file.close();
             cout << "Данные о товаре успешно сохранены" << endl;
         }
@@ -131,7 +131,7 @@ void updateProductsInfo(const vector<Product>& products, const string& filename)
         }
         file.close();
     } else {
-        cout << "Error opening file for writing." << endl;
+        cout << "Ошибка открытия файла" << endl;
     }
 }
 
