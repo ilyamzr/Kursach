@@ -8,9 +8,9 @@ using namespace std;
 void sellerMode(const string& login, const string& filename)
 {
     int choice = 0;
-    while (choice != 4 && choice != 5)
+    while (choice != 4)
     {
-        cout << "Выберите действие:\n1) Добавить товар\n2) Посмотреть мои товары\n3) Удалить товар\n4) Назад\n5) Завершить";
+        cout << "Выберите действие:\n1) Добавить товар\n2) Посмотреть мои товары\n3) Удалить товар\n4) Назад";
         cin >> choice;
         if (choice == 1)
         {
@@ -24,30 +24,35 @@ void sellerMode(const string& login, const string& filename)
         {
             deleteProductFunc(login,filename);
         }
+        else if (choice != 4) cout << "Неверный выбор" << endl;
     }
 }
 
 void buyermode(const string &login, const string &filename)
 {
-    cout << "Выберите действие:\n1) Категории \n2) Все товары \n3) Профиль \n4) Назад";
     int choice;
-    cin >> choice;
-    if (choice == 1)
+    while (choice != 4)
     {
-        categoriesFunc(login,filename);
+        cout << "Выберите действие:\n1) Категории \n2) Все товары \n3) Профиль \n4) Назад";
+        cin >> choice;
+        if (choice == 1)
+        {
+            categoriesFunc(filename);
+        }
+        else if (choice == 2)
+        {
+            viewProducts(login,filename,0);
+        }
+        else if (choice != 4) cout << "Неверный выбор" << endl;
     }
-    else if (choice == 2)
-    {
-        viewProducts(login,filename,0);
-    }
-    else if (choice != 4) cout << "Неверный выбор" << endl;
+
 }
 
-const std::array<std::array<std::string, 7>, 9> allCategories = {{
+const std::array<std::array<std::string, 6>, 9> allCategories = {{
     {"Техника", "Смартфон", "Ноутбуки", "Телевизоры", "Бытовая техника", "Аудио и видео техника"},
     {"Спорт и активный отдых", "Спортивная одежда", "Спортивная обувь", "Тренажеры и фитнес-оборудование", "Туристическое снаряжение", "Велосипеды и аксессуары"},
     {"Мебель", "Мебель для гостиной", "Мебель для спальни", "Мебель для кухни", "Офисная мебель", "Детская мебель"},
-    {"Дом", "Декор", "Освещение", "Текстиль", "Хранение", "Уборка", "ашашыа"},
+    {"Дом", "Декор", "Освещение", "Текстиль", "Хранение", "Уборка"},
     {"Игрушки", "Конструкторы", "Мягкие игрушки", "Настольные игры", "Развивающие игрушки", "Электронные игрушки"},
     {"Мужчинам", "Одежда", "Обувь", "Аксессуары", "Парфюмерия", "Спортивные товары"},
     {"Женщинам", "Одежда", "Обувь", "Аксессуары", "Косметика", "Парфюмерия"},

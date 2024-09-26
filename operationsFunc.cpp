@@ -4,6 +4,7 @@
 #include <vector>
 #include <random>
 #include "interfaceFuncs.h"
+#include "operationFuncs.h"
 
 using namespace std;
 
@@ -16,60 +17,6 @@ string getWord(string &line)
     }
     return word;
 }
-template <typename T>
-void symbToDigit(string line, T* num)
-{
-    int i = 0;
-    *num = 0;
-    while (line[i])
-    {
-        int temp = line[i] - '0';
-        *num += static_cast<T>(temp * (static_cast<int>(line.size()) - i));
-        i++;
-    }
-}
-
-class Product {
-    friend void deleteProduct(const string& filename, int deleteNum);
-private:
-    string name;
-    int category{};
-    int subcategory{};
-    float price{};
-    string description;
-    int id{};
-    string sellerName;
-
-public:
-    Product(string_view n, int c, int sc, float p, string_view d, int ID, string_view login)
-
-            : name(n), category(c), subcategory(sc), price(p), description(d), id(ID), sellerName(login){}
-
-    static Product readFromFile(string line) {
-        string sn = getWord(line);
-        string n = getWord(line);
-        int c;
-        symbToDigit(getWord(line),&c);
-        int sc;
-        symbToDigit(getWord(line),&sc);
-        float p;
-        symbToDigit(getWord(line),&p);
-        string d = getWord(line);
-        int ID;
-        symbToDigit(getWord(line),&ID);
-
-        return {n,c,sc,p,d,ID,sn};
-    }
-
-    static void saveProductToFile(const Product& product, const string &filename) {
-        ofstream file(filename, ios::app);
-        if (file.is_open()) {
-            file << product.sellerName << "/" << product.name << "/" << product.category << "/" << product.subcategory << "/" << product.price << "/" << product.description << "/" << product.id << "/" << endl;
-            file.close();
-            cout << "Данные о товаре успешно сохранены" << endl;
-        }
-    }
-};
 
 Product addProduct(string_view login)
 {
@@ -94,7 +41,7 @@ Product addProduct(string_view login)
     getline(cin,descriprion);
     random_device rd;
     mt19937 gen(rd());
-    uniform_int_distribution dis(1, 100);
+    uniform_int_distribution dis(1, 999999);
     int id = dis(gen);
     Product product(name,category,subcategory,price,descriprion,id,login);
     return product;
@@ -131,7 +78,7 @@ void updateProductsInfo(const vector<Product>& products, const string& filename)
         }
         file.close();
     } else {
-        cout << "Ошибка открытия файла" << endl;
+        cout << "Не удалось открыть файл: " << filename << endl;
     }
 }
 
@@ -143,7 +90,8 @@ void deleteProduct(const string& filename, int deleteNum) {
         while (file.good()) {
             string line;
             getline(file,line);
-            if (Product product = Product::readFromFile(line); count != deleteNum && !product.name.empty()) {
+            Product product = Product::readFromFile(line);
+            if (count != deleteNum && !product.name.empty()) {
                 products.push_back(product);
             }
             count++;
@@ -151,6 +99,39 @@ void deleteProduct(const string& filename, int deleteNum) {
         file.close();
     }
     updateProductsInfo(products, filename);
+}
+
+void categoriesSort(const string& filename, const int category, const int subcategory)
+{
+    ifstream file(filename);
+    if (!file.is_open()) {
+        cout << "Не удалось открыть файл: " << filename << endl;
+        return;
+    }
+    string line;
+    string word;
+    int flag = 0;
+    int i = 0;
+    while (getline(file, line)) {
+        getWord(line);
+        string linecopy = line;
+        getWord(line);
+        word = getWord(line);
+        int check;
+        symbToDigit(word,&check);
+        if (check == category) {
+            word = getWord(line);
+            symbToDigit(word,&check);
+            if (check == subcategory)
+            {
+                i++;
+                cout << "\n" << i << ")";
+                printProductInfo(linecopy);
+                flag = 1;
+            }
+        }
+    }
+    if (flag == 0) cout << "Таких товаров нет =(" << endl;
 }
 
 void addProductFunc(const string_view& login, const string& filename)
@@ -168,11 +149,15 @@ void deleteProductFunc(const string_view& login, const string& filename)
     deleteProduct(filename,deletedNum);
 }
 
-void categoriesFunc(const string_view& login, const string& filename)
+void categoriesFunc(const string& filename)
 {
     printCategories();
+    cout << "Выберите категорию" << endl;
     int category;
     cin >> category;
-    printSubCategories(category);
-    viewProducts(login,filename,0);
+    printSubCategories(category-1);
+    cout << "Выберите подкатегорию" << endl;
+    int subcategory;
+    cin >> subcategory;
+    categoriesSort(filename,category,subcategory);
 }
