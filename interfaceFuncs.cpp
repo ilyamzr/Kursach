@@ -30,7 +30,7 @@ void sellerMode(const string& login, const string& filename)
 
 void buyermode(const string &login, const string &filename)
 {
-    int choice;
+    int choice = 0;
     while (choice != 4)
     {
         cout << "Выберите действие:\n1) Категории \n2) Все товары \n3) Профиль \n4) Назад";
