@@ -41,8 +41,12 @@ void sellerMode()
 void buyermode()
 {
 <<<<<<< HEAD
+<<<<<<< HEAD
     string filename = "products.txt";
     int choice;
+=======
+    int choice = 0;
+>>>>>>> 010c55f5ef3869b70f5dc6105b6a95c277507403
 =======
     int choice = 0;
 >>>>>>> 010c55f5ef3869b70f5dc6105b6a95c277507403

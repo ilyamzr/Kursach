@@ -1,6 +1,10 @@
 #include <iostream>
 <<<<<<< HEAD
+<<<<<<< HEAD
 #include <windows.h>
+=======
+#include <string>
+>>>>>>> 010c55f5ef3869b70f5dc6105b6a95c277507403
 =======
 #include <string>
 >>>>>>> 010c55f5ef3869b70f5dc6105b6a95c277507403
@@ -13,6 +17,7 @@ using namespace std;
 int main(int argc, char *argv[]) {
     system("chcp 65001");
 <<<<<<< HEAD
+<<<<<<< HEAD
     SetConsoleOutputCP(CP_UTF8);
 
     QApplication app(argc, argv);
@@ -23,6 +28,8 @@ int main(int argc, char *argv[]) {
     return QApplication::exec();
 }
 =======
+=======
+>>>>>>> 010c55f5ef3869b70f5dc6105b6a95c277507403
     string login;
     string filename = "products.txt";
     cout << "Введите логин";
@@ -43,4 +50,7 @@ int main(int argc, char *argv[]) {
      }
     return 0;
 }
+<<<<<<< HEAD
+>>>>>>> 010c55f5ef3869b70f5dc6105b6a95c277507403
+=======
 >>>>>>> 010c55f5ef3869b70f5dc6105b6a95c277507403
