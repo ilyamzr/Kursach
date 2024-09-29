@@ -10,8 +10,4 @@ add_executable(untitled43 main.cpp
         interfaceFuncs.h
         productClass.cpp
         productClass.h
-        profileClass.cpp
-        profileClass.h
-        profileFuncs.cpp
-        profileFuncs.h
 )

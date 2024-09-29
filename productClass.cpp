@@ -21,6 +21,5 @@ void Product::saveProductToFile(const Product& product, const std::string &filen
     if (file.is_open()) {
         file << product.sellerName << "/" << product.name << "/" << product.category << "/" << product.subcategory << "/" << product.price << "/" << product.description << "/" << product.id << "/" << std::endl;
         file.close();
-        std::cout << "Данные о товаре успешно сохранены" << std::endl;
     }
 }

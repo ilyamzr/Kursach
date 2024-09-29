@@ -4,7 +4,7 @@
 #include <string_view>
 
 class Product {
-    friend void deleteProduct(const std::string& filename, int deleteNum);
+    friend void deleteProduct(const std::string& filename, int deleteNum, const std::string_view& login);
 private:
     std::string name;
     int category{};

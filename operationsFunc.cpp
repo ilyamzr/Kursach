@@ -82,19 +82,19 @@ void updateProductsInfo(const vector<Product>& products, const string& filename)
     }
 }
 
-void deleteProduct(const string& filename, int deleteNum) {
+void deleteProduct(const string& filename, int deleteNum, const string_view& login) {
     ifstream file(filename);
     vector<Product> products;
-    int count = 1;
+    int count = 0;
     if (file.is_open()) {
         while (file.good()) {
             string line;
             getline(file,line);
             Product product = Product::readFromFile(line);
+            if (login == product.sellerName) count++;
             if (count != deleteNum && !product.name.empty()) {
                 products.push_back(product);
             }
-            count++;
         }
         file.close();
     }
@@ -146,7 +146,7 @@ void deleteProductFunc(const string_view& login, const string& filename)
     cout << "Выберите товар, который хотите удалить";
     int deletedNum;
     cin >> deletedNum;
-    deleteProduct(filename,deletedNum);
+    deleteProduct(filename,deletedNum,login);
 }
 
 void categoriesFunc(const string& filename)
