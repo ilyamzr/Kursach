@@ -58,38 +58,31 @@ void deleteProfile(const string& filename, const string_view& login) {
     updateProfilesInfo(profiles, filename);
 }
 
-Product getProductByID(const string& filename,int ID)
-{
+Product getProductByID(const string& filename, int ID) {
     ifstream file(filename);
-    if (file.is_open()) {
-        while (file.good()) {
-            string line;
-            getline(file,line);
-            Product product = Product::readFromFile(line);
-            if (product.id == ID) {
-                return product;
-            }
+    string line;
+    while (std::getline(file, line)) {
+        Product product = Product::readFromFile(line);
+        if (product.id == ID) {
+            return product;
         }
-        file.close();
     }
+    file.close();
+    throw out_of_range("Товар с указанным идентификатором не найден.");
 }
 
-Profile getProfileByLogin(const string& filename, const string_view& login)
-{
+Profile getProfileByLogin(const string& filename, const string_view& login) {
     ifstream file(filename);
-    int flag = 0;
-    if (file.is_open()) {
-        while (file.good()) {
-            string line;
-            getline(file,line);
-            Profile profile = Profile::readProfileFromFile(line);
-            if (profile == login) {
-                file.close();
-                return profile;
-            }
+    string line;
+    while (getline(file, line)) {
+        Profile profile = Profile::readProfileFromFile(line);
+        if (profile.login == login) { // Assuming 'login' is a member of Profile
+            return profile;
         }
-        file.close();
     }
+
+    file.close();
+    throw out_of_range("Профиль с указанным логином не найден.");
 }
 
 void buyProduct(const string_view& login, int ID)

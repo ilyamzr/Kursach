@@ -115,8 +115,6 @@ void categoriesSort(const string& filename, const int category, const int subcat
     int flag = 0;
     int i = 0;
     while (getline(file, line)) {
-        if (!line.empty())
-        {
             Product product = Product::readFromFile(line);
             if (product.category == category && product.subcategory == subcategory) {
                 i++;
@@ -127,7 +125,6 @@ void categoriesSort(const string& filename, const int category, const int subcat
                 }
                 flag = 1;
             }
-        }
     }
     if (flag == 0) cout << "Таких товаров нет =(" << endl;
 }
@@ -138,24 +135,31 @@ void addProductFunc(const string_view& login, const string& filename)
     Product::saveProductToFile(newProduct, filename);
 }
 
-int getID(int deletedNum, const string_view &login, int mode)
-{
+int getID(int deletedNum, const std::string_view &login, int mode) {
     ifstream file("products.txt");
-    int ID;
+
+    int ID = -1;
     int count = 0;
     string line;
-    if (file.is_open()) {
-        while (true)
-        {
-            getline(file,line);
-            Product product = Product::readFromFile(line);
-            ID = product.id;
-            if ((product.owner == login && mode == 1) || (product.owner != login && mode == 2)) count++;
-            if (count == deletedNum) break;
+
+    while (getline(file, line)) {
+        Product product = Product::readFromFile(line);
+        if ((product.owner == login && mode == 1) || (product.owner != login && mode == 2)) {
+            count++;
+            if (count == deletedNum) {
+                ID = product.id;
+                break;
+            }
         }
-        file.close();
-        return ID;
     }
+
+    file.close();
+
+    if (ID == -1) {
+        throw out_of_range("Количество удаленных продуктов превышает количество доступных.");
+    }
+
+    return ID;
 }
 
 void deleteProductFunc(const string_view& login, const string& filename)
