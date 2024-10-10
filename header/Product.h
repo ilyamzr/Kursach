@@ -11,7 +11,7 @@ class Product {
     friend Product getProductByID(const std::string& filename,int ID);
     friend int getID(int deletedNum,const std::string_view& login, int mode);
     friend void buyProduct(const std::string_view& login, int ID);
-    friend void printProductInfo(Product& product);
+    friend void printProductInfo(const Product& product);
     friend void viewProducts(const std::string_view &login, const std::string &filename, int mode);
     friend void categoriesSort(const std::string& filename, int category, int subcategory);
 private:
@@ -22,13 +22,13 @@ private:
     std::string description;
     int id{};
     std::string owner;
-    int forSale;
+    int forSale = 1;
 
 public:
-    Product(std::string_view n, int c, int sc, float p, std::string_view d, int ID, std::string_view login, int fs)
-            : name(n), category(c), subcategory(sc), price(p), description(d), id(ID), owner(login),forSale(fs) {}
+    Product(std::string_view n, int c, int sc, float p, std::string_view d, int ID, std::string_view login)
+            : name(n), category(c), subcategory(sc), price(p), description(d), id(ID), owner(login) {}
 
-    float getPrice() const {
+    [[nodiscard]] float getPrice() const {
         return price;
     }
 

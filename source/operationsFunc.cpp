@@ -43,8 +43,7 @@ Product addProduct(string_view login)
     mt19937 gen(rd());
     uniform_int_distribution dis(1, 999999);
     int id = dis(gen);
-    int forSale = 1;
-    Product product(name,category,subcategory,price,descriprion,id,login,forSale);
+    Product product(name,category,subcategory,price,descriprion,id,login);
     return product;
 }
 
@@ -94,12 +93,9 @@ void deleteProduct(const string& filename, int ID) {
         while (file.good()) {
             string line;
             getline(file,line);
-            if (!line.empty())
-            {
-                Product product = Product::readFromFile(line);
-                if (product.id != ID) {
-                    products.push_back(product);
-                }
+            Product product = Product::readFromFile(line);
+            if (product.id != ID) {
+                products.push_back(product);
             }
         }
         file.close();
@@ -122,17 +118,14 @@ void categoriesSort(const string& filename, const int category, const int subcat
         if (!line.empty())
         {
             Product product = Product::readFromFile(line);
-            if (product.category == category) {
-                if (product.subcategory == subcategory)
+            if (product.category == category && product.subcategory == subcategory) {
+                i++;
+                cout << "\n" << i << ")";
+                if (product.forSale != 0)
                 {
-                    i++;
-                    cout << "\n" << i << ")";
-                    if (product.forSale != 0)
-                    {
-                        printProductInfo(product);
-                    }
-                    flag = 1;
+                    printProductInfo(product);
                 }
+                flag = 1;
             }
         }
     }
@@ -155,13 +148,10 @@ int getID(int deletedNum, const string_view &login, int mode)
         while (true)
         {
             getline(file,line);
-            if (!line.empty())
-            {
-                Product product = Product::readFromFile(line);
-                ID = product.id;
-                if ((product.owner == login && mode == 1) || (product.owner != login && mode == 2)) count++;
-                if (count == deletedNum) break;
-            }
+            Product product = Product::readFromFile(line);
+            ID = product.id;
+            if ((product.owner == login && mode == 1) || (product.owner != login && mode == 2)) count++;
+            if (count == deletedNum) break;
         }
         file.close();
         return ID;

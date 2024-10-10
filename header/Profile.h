@@ -23,14 +23,14 @@ public:
     Profile(std::string l,std::string p, float b, int pa, std::vector <int> up)
             : login(std::move(l)),password(std::move(p)),balance(b),productsAmount(pa),userProducts(std::move(up)){}
 
-    Profile operator + (const Product& product) const {
-        Profile newProfile = *this;
+    friend Profile operator+(const Profile& profile,const Product& product) {
+        Profile newProfile = profile;
         newProfile.balance += product.getPrice();
         return newProfile;
     }
 
-    Profile operator - (const Product& product) const {
-        Profile newProfile = *this;
+    friend Profile operator - (const Profile& profile,const Product& product) {
+        Profile newProfile = profile;
         newProfile.balance -= product.getPrice();
         return newProfile;
     }

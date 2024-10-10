@@ -58,6 +58,25 @@ void buyermode(const string &login, const string &filename)
 
 }
 
+int guestMode(int choice, const string& login, const string& filename, int usermode)
+{
+    if (choice != 3)
+    {
+        cout << "Я хочу войти как:\n1) Продавец\n2) Покупатель\n3) Завершить" << endl;
+        cin >> usermode;
+    }
+    else usermode = 2;
+    if (usermode == 1) {
+        sellerMode(login, filename);
+    }
+    else if (usermode == 2) {
+        buyermode(login, filename);
+    }
+    else if (usermode != 3)
+        cout << "Неверный выбор" << endl;
+    return usermode;
+}
+
 const std::array<std::array<std::string, 6>, 9> allCategories = {{
     {"Техника", "Смартфон", "Ноутбуки", "Телевизоры", "Бытовая техника", "Аудио и видео техника"},
     {"Спорт и активный отдых", "Спортивная одежда", "Спортивная обувь", "Тренажеры и фитнес-оборудование", "Туристическое снаряжение", "Велосипеды и аксессуары"},
@@ -84,7 +103,7 @@ void printSubCategories(int category)
     }
 }
 
-void printProductInfo(Product& product)
+void printProductInfo(const Product& product)
 {
     cout << "Наименование товара: " << product.name << endl;
     cout << allCategories[product.category-1][0] << "/";

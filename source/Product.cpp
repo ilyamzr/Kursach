@@ -3,7 +3,7 @@
 #include <sstream>
 
 Product Product::readFromFile(std::string line) {
-    std::string sn = getWord(line);
+    std::string o = getWord(line);
     std::string n = getWord(line);
     std::string word = getWord(line);
     int c;
@@ -19,7 +19,9 @@ Product Product::readFromFile(std::string line) {
     word = getWord(line);
     int fs;
     std::istringstream(word) >> fs;
-    return {n, c, sc, p, d, ID, sn,fs};
+    Product product(n,c,sc,p,d,ID,o);
+    product.forSale = fs;
+    return product;
 }
 
 void Product::saveProductToFile(const Product& product, const std::string &filename) {

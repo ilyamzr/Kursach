@@ -48,12 +48,9 @@ void deleteProfile(const string& filename, const string_view& login) {
         while (file.good()) {
             string line;
             getline(file,line);
-            if (!line.empty())
-            {
-                Profile profile = Profile::readProfileFromFile(line);
-                if (profile != login) {
-                    profiles.push_back(profile);
-                }
+            Profile profile = Profile::readProfileFromFile(line);
+            if (profile != login) {
+                profiles.push_back(profile);
             }
         }
         file.close();
@@ -68,12 +65,9 @@ Product getProductByID(const string& filename,int ID)
         while (file.good()) {
             string line;
             getline(file,line);
-            if (!line.empty())
-            {
-                Product product = Product::readFromFile(line);
-                if (product.id == ID) {
-                    return product;
-                }
+            Product product = Product::readFromFile(line);
+            if (product.id == ID) {
+                return product;
             }
         }
         file.close();
@@ -83,17 +77,15 @@ Product getProductByID(const string& filename,int ID)
 Profile getProfileByLogin(const string& filename, const string_view& login)
 {
     ifstream file(filename);
+    int flag = 0;
     if (file.is_open()) {
         while (file.good()) {
             string line;
             getline(file,line);
-            if (!line.empty())
-            {
-                Profile profile = Profile::readProfileFromFile(line);
-                if (profile == login) {
-                    file.close();
-                    return profile;
-                }
+            Profile profile = Profile::readProfileFromFile(line);
+            if (profile == login) {
+                file.close();
+                return profile;
             }
         }
         file.close();
