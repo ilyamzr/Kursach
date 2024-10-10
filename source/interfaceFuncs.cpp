@@ -1,7 +1,9 @@
 #include <iostream>
 #include <string>
 #include <array>
-#include "operationFuncs.h"
+#include "../header/operationFuncs.h"
+#include "../header/profileFuncs.h"
+#include "../header/profileInterface.h"
 
 using namespace std;
 
@@ -33,7 +35,7 @@ void buyermode(const string &login, const string &filename)
     int choice = 0;
     while (choice != 4)
     {
-        cout << "Выберите действие:\n1) Категории \n2) Все товары \n3) Профиль \n4) Назад";
+        cout << "Выберите действие:\n1) Категории \n2) Все товары \n3) Купить \n4) Профиль \n5) Назад";
         cin >> choice;
         if (choice == 1)
         {
@@ -43,7 +45,15 @@ void buyermode(const string &login, const string &filename)
         {
             viewProducts(login,filename,0);
         }
-        else if (choice != 4) cout << "Неверный выбор" << endl;
+        else if (choice == 3)
+        {
+            buyProductFunc(login);
+        }
+        else if (choice == 4)
+        {
+            profileFunc(login);
+        }
+        else if (choice != 5) cout << "Неверный выбор" << endl;
     }
 
 }
@@ -74,22 +84,12 @@ void printSubCategories(int category)
     }
 }
 
-void printProductInfo(string &productInfo)
+void printProductInfo(Product& product)
 {
-    string word = getWord(productInfo);
-    cout << "Наименование товара: " << word << endl;
-    word = getWord(productInfo);
-    int num1;
-    symbToDigit(word, &num1);
-    cout << allCategories[num1-1][0] << "/";
-    word = getWord(productInfo);
-    int num2;
-    symbToDigit(word, &num2);
-    cout << allCategories[num1-1][num2] << endl;
-    word = getWord(productInfo);
-    cout << "Цена: " << word << "$" << endl;
-    word = getWord(productInfo);
-    cout << "Описание товара: " << word << endl;
-    word = getWord(productInfo);
-    cout << "Артикул: " << word << endl;
+    cout << "Наименование товара: " << product.name << endl;
+    cout << allCategories[product.category-1][0] << "/";
+    cout << allCategories[product.category-1][product.subcategory] << endl;
+    cout << "Цена: " << product.price << "$" << endl;
+    cout << "Описание товара: " << product.description << endl;
+    cout << "Артикул: " << product.id << endl;
 }

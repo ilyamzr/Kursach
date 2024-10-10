@@ -3,8 +3,8 @@
 #include "fstream"
 #include <vector>
 #include <random>
-#include "interfaceFuncs.h"
-#include "operationFuncs.h"
+#include "../header/interfaceFuncs.h"
+#include "../header/Product.h"
 
 using namespace std;
 
@@ -43,7 +43,8 @@ Product addProduct(string_view login)
     mt19937 gen(rd());
     uniform_int_distribution dis(1, 999999);
     int id = dis(gen);
-    Product product(name,category,subcategory,price,descriprion,id,login);
+    int forSale = 1;
+    Product product(name,category,subcategory,price,descriprion,id,login,forSale);
     return product;
 }
 
@@ -58,11 +59,15 @@ void viewProducts(const string_view &login, const string &filename, int mode)
     int flag = 0;
     int i = 0;
     while (getline(file, line)) {
-        if (string currentSellerName = getWord(line); currentSellerName == login || mode == 0) {
-            i++;
-            cout << "\n" << i << ")";
-            printProductInfo(line);
-            flag = 1;
+        if (!line.empty())
+        {
+            Product product = Product::readFromFile(line);
+            if (((product.owner == login && mode == 1) || (product.owner != login && mode == 2) || mode == 0) && product.forSale != 0) {
+                i++;
+                cout << "\n" << i << ")";
+                printProductInfo(product);
+                flag = 1;
+            }
         }
     }
     if (flag == 0) cout << "У вас нету товаров =(" << endl;
@@ -82,18 +87,19 @@ void updateProductsInfo(const vector<Product>& products, const string& filename)
     }
 }
 
-void deleteProduct(const string& filename, int deleteNum, const string_view& login) {
+void deleteProduct(const string& filename, int ID) {
     ifstream file(filename);
     vector<Product> products;
-    int count = 0;
     if (file.is_open()) {
         while (file.good()) {
             string line;
             getline(file,line);
-            Product product = Product::readFromFile(line);
-            if (login == product.sellerName) count++;
-            if (count != deleteNum && !product.name.empty()) {
-                products.push_back(product);
+            if (!line.empty())
+            {
+                Product product = Product::readFromFile(line);
+                if (product.id != ID) {
+                    products.push_back(product);
+                }
             }
         }
         file.close();
@@ -113,21 +119,20 @@ void categoriesSort(const string& filename, const int category, const int subcat
     int flag = 0;
     int i = 0;
     while (getline(file, line)) {
-        getWord(line);
-        string linecopy = line;
-        getWord(line);
-        word = getWord(line);
-        int check;
-        symbToDigit(word,&check);
-        if (check == category) {
-            word = getWord(line);
-            symbToDigit(word,&check);
-            if (check == subcategory)
-            {
-                i++;
-                cout << "\n" << i << ")";
-                printProductInfo(linecopy);
-                flag = 1;
+        if (!line.empty())
+        {
+            Product product = Product::readFromFile(line);
+            if (product.category == category) {
+                if (product.subcategory == subcategory)
+                {
+                    i++;
+                    cout << "\n" << i << ")";
+                    if (product.forSale != 0)
+                    {
+                        printProductInfo(product);
+                    }
+                    flag = 1;
+                }
             }
         }
     }
@@ -140,13 +145,37 @@ void addProductFunc(const string_view& login, const string& filename)
     Product::saveProductToFile(newProduct, filename);
 }
 
+int getID(int deletedNum, const string_view &login, int mode)
+{
+    ifstream file("products.txt");
+    int ID;
+    int count = 0;
+    string line;
+    if (file.is_open()) {
+        while (true)
+        {
+            getline(file,line);
+            if (!line.empty())
+            {
+                Product product = Product::readFromFile(line);
+                ID = product.id;
+                if ((product.owner == login && mode == 1) || (product.owner != login && mode == 2)) count++;
+                if (count == deletedNum) break;
+            }
+        }
+        file.close();
+        return ID;
+    }
+}
+
 void deleteProductFunc(const string_view& login, const string& filename)
 {
     viewProducts(login,filename,1);
     cout << "Выберите товар, который хотите удалить";
     int deletedNum;
     cin >> deletedNum;
-    deleteProduct(filename,deletedNum,login);
+    int ID = getID(deletedNum,login,1);
+    deleteProduct(filename,ID);
 }
 
 void categoriesFunc(const string& filename)
