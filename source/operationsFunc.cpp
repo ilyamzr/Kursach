@@ -64,7 +64,7 @@ void viewProducts(const string_view &login, const string &filename, int mode)
             if (((product.owner == login && mode == 1) || (product.owner != login && mode == 2) || mode == 0) && product.forSale != 0) {
                 i++;
                 cout << "\n" << i << ")";
-                printProductInfo(product);
+                Product::printProductInfo(product);
                 flag = 1;
             }
         }
@@ -121,7 +121,7 @@ void categoriesSort(const string& filename, const int category, const int subcat
                 cout << "\n" << i << ")";
                 if (product.forSale != 0)
                 {
-                    printProductInfo(product);
+                    Product::printProductInfo(product);
                 }
                 flag = 1;
             }

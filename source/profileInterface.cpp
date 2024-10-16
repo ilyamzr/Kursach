@@ -2,6 +2,7 @@
 #include <string>
 #include "../header/operationFuncs.h"
 #include "../header/profileFuncs.h"
+#include "../header/ProductData.h"
 
 using namespace std;
 
@@ -16,7 +17,8 @@ void profileFunc(const string& login)
         if (choice == 1)
         {
             Profile profile = getProfileByLogin(filename,login);
-            checkProfileInfo(profile);
+            ProductData productData;
+            ProductData::displayProfileAndProducts(profile);
         }
         else if (choice == 2)
         {

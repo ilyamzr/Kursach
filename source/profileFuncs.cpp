@@ -76,7 +76,7 @@ Profile getProfileByLogin(const string& filename, const string_view& login) {
     string line;
     while (getline(file, line)) {
         Profile profile = Profile::readProfileFromFile(line);
-        if (profile.login == login) { // Assuming 'login' is a member of Profile
+        if (profile.login == login) {
             return profile;
         }
     }
@@ -113,6 +113,9 @@ void buyProduct(const string_view& login, int ID)
     }
 }
 
+Product::Product() = default;
+
+
 void buyProductFunc(const string_view& login)
 {
     viewProducts(login,"products.txt",2);
@@ -134,16 +137,3 @@ void depositMoney(const string_view& login, const string& filename)
     Profile::saveProfileToFile(profile,filename);
 }
 
-void checkProfileInfo(Profile& profile)
-{
-    cout << "Логин: " << profile.login << endl;
-    cout << "<Баланс>: " << profile.balance << "$" << endl;
-    cout << "Количество товаров: " << profile.productsAmount << endl;
-    cout << "---------------------------" << endl;
-    for (int i = 0; i < profile.productsAmount; i++)
-    {
-        Product product = getProductByID("products.txt",profile.userProducts[i]);
-        cout << i + 1 << ")" << endl;
-        printProductInfo(product);
-    }
-}

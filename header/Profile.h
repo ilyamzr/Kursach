@@ -12,7 +12,6 @@ class Profile {
     friend Profile getProfileByLogin(const std::string& filename, const std::string_view& login);
     friend void deleteProfile(const std::string& filename, const std::string_view& login);
     friend void depositMoney(const std::string_view& login, const std::string& filename);
-    friend void checkProfileInfo(Profile& profile);
 private:
     std::string login;
     std::string password;
@@ -22,6 +21,8 @@ private:
 public:
     Profile(std::string l,std::string p, float b, int pa, std::vector <int> up)
             : login(std::move(l)),password(std::move(p)),balance(b),productsAmount(pa),userProducts(std::move(up)){}
+
+    Profile();
 
     friend Profile operator+(const Profile& profile,const Product& product) {
         Profile newProfile = profile;
@@ -40,7 +41,16 @@ public:
     }
 
     static void saveProfileToFile(const Profile &profile, const std::string &filename);
-
+    static void checkProfileInfo(Profile &profile);
     static Profile readProfileFromFile(std::string line);
+
+    [[nodiscard]] static int getProductsAmount(Profile const& profile) {
+        return profile.productsAmount;
+    }
+
+    [[nodiscard]] static const std::vector<int>& getUserProducts(Profile const& profile) {
+        return profile.userProducts;
+    }
+
 };
 #endif

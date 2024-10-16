@@ -103,12 +103,3 @@ void printSubCategories(int category)
     }
 }
 
-void printProductInfo(const Product& product)
-{
-    cout << "Наименование товара: " << product.name << endl;
-    cout << allCategories[product.category-1][0] << "/";
-    cout << allCategories[product.category-1][product.subcategory] << endl;
-    cout << "Цена: " << product.price << "$" << endl;
-    cout << "Описание товара: " << product.description << endl;
-    cout << "Артикул: " << product.id << endl;
-}
