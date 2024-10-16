@@ -16,4 +16,6 @@ add_executable(untitled43 source/main.cpp
         header/profileFuncs.h
         source/profileInterface.cpp
         header/profileInterface.h
+        source/ProductData.cpp
+        header/ProductData.h
 )
