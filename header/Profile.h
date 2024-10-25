@@ -1,56 +1,49 @@
 #include <iostream>
 #include "Product.h"
-#include <utility>
 #include <vector>
-#include <string_view>
 
 #ifndef PROFILECLASS_H
 #define PROFILECLASS_H
 
+template <typename T>
 class Profile {
     friend void buyProduct(const std::string_view& login, int ID);
     friend Profile getProfileByLogin(const std::string& filename, const std::string_view& login);
     friend void deleteProfile(const std::string& filename, const std::string_view& login);
     friend void depositMoney(const std::string_view& login, const std::string& filename);
+    friend bool checkLogin(const std::string& login);
+
 private:
     std::string login;
-    std::string password;
-    float balance{};
+    T balance{};
     int productsAmount{};
-    std::vector <int> userProducts;
+    std::vector<int> userProducts;
+    std::string password;
+
 public:
-    Profile(std::string l,std::string p, float b, int pa, std::vector <int> up)
-            : login(std::move(l)),password(std::move(p)),balance(b),productsAmount(pa),userProducts(std::move(up)){}
+    Profile(std::string l, std::string p, T b, int pa, std::vector<int> up)
+            : login(std::move(l)), balance(b), productsAmount(pa), userProducts(std::move(up)), password(std::move(p)) {}
 
-    Profile();
+    Profile() = default;
 
-    friend Profile operator+(const Profile& profile,const Product& product) {
-        Profile newProfile = profile;
-        newProfile.balance += product.getPrice();
-        return newProfile;
+    void setPassword(const std::string_view& newPassword) {
+        password = newPassword;
     }
 
-    friend Profile operator - (const Profile& profile,const Product& product) {
-        Profile newProfile = profile;
-        newProfile.balance -= product.getPrice();
-        return newProfile;
+    template <typename U>
+    static U updateBalance(U amount, T profileBalance) {
+        U balance = static_cast<T>(amount) + profileBalance;
+        return balance;
     }
 
-    bool operator==(const std::string_view& value) const {
-        return this->login == value;
-    }
+    virtual ~Profile() = default;
 
-    static void saveProfileToFile(const Profile &profile, const std::string &filename);
-    static void checkProfileInfo(Profile &profile);
+    static void saveProfileToFile(const Profile& profile, const std::string& filename);
     static Profile readProfileFromFile(std::string line);
-
-    [[nodiscard]] static int getProductsAmount(Profile const& profile) {
-        return profile.productsAmount;
-    }
-
-    [[nodiscard]] static const std::vector<int>& getUserProducts(Profile const& profile) {
+    static std::vector<int> getProducts(const Profile& profile) {
         return profile.userProducts;
     }
 
 };
+
 #endif

@@ -5,6 +5,7 @@
 #include <fstream>
 #include <iostream>
 #include <string_view>
+#include <vector>
 
 class Product {
     friend void deleteProduct(const std::string& filename, int deleteNum);
@@ -12,7 +13,7 @@ class Product {
     friend int getID(int deletedNum, const std::string_view& login, int mode);
     friend void buyProduct(const std::string_view& login, int ID);
     friend void viewProducts(const std::string_view &login, const std::string &filename, int mode);
-    friend void categoriesSort(const std::string& filename, int category, int subcategory);
+    friend std::vector<Product> categoriesSort(const std::string& filename, int category, int subcategory);
 
 private:
     std::string name;
@@ -30,14 +31,16 @@ public:
 
     Product();
 
-    [[nodiscard]] float getPrice() const {
-        return price;
-    }
     virtual ~Product() = default;
     static Product readFromFile(std::string line);
     static void saveProductToFile(const Product& product, const std::string &filename);
     static void printProductInfo(Product& product);
+    static int getID(Product const &product)
+    {
+        return product.id;
+    }
     virtual void printError();
 };
 
 #endif
+

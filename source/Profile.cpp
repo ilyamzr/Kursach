@@ -53,6 +53,5 @@ void Profile::checkProfileInfo(Profile& profile)
     }
 }
 
-Profile::Profile() = default;
 
 

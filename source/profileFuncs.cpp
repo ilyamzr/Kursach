@@ -6,34 +6,34 @@
 
 using namespace std;
 
-Profile addProfile()
+auto addProfile()
 {
     cout << "Введите логин: ";
     string login;
     _flushall();
-    getline(cin,login);
+    getline(cin, login);
     cout << "Введите пароль: ";
     string password;
     _flushall();
-    getline(cin,password);
+    getline(cin, password);
     vector<int> userProducts;
-    Profile profile(login,password,0,0,userProducts);
+    Profile profile(login, password, 0.0f, 0, userProducts);
     return profile;
 }
 
 void createNewProfile()
 {
     string filename = "profileData.txt";
-    Profile profile = addProfile();
-    Profile::saveProfileToFile(profile,filename);
+    Profile<float> profile = addProfile();
+    Profile<float>::saveProfileToFile(profile, filename);
 }
 
-void updateProfilesInfo(const vector<Profile>& profiles, const string& filename)
+void updateProfilesInfo(const vector<Profile<float>>& profiles, const string& filename)
 {
     ofstream file(filename);
     if (file.is_open()) {
-        for (const Profile& profile : profiles) {
-            Profile::saveProfileToFile(profile,filename);
+        for (const Profile<float>& profile : profiles) {
+            Profile<float>::saveProfileToFile(profile, filename);
         }
         file.close();
     } else {
@@ -43,13 +43,13 @@ void updateProfilesInfo(const vector<Profile>& profiles, const string& filename)
 
 void deleteProfile(const string& filename, const string_view& login) {
     ifstream file(filename);
-    vector<Profile> profiles;
+    vector<Profile<float>> profiles;
     if (file.is_open()) {
         while (file.good()) {
             string line;
-            getline(file,line);
-            Profile profile = Profile::readProfileFromFile(line);
-            if (profile != login) {
+            getline(file, line);
+            Profile<float> profile = Profile<float>::readProfileFromFile(line);
+            if (profile.login != login) {
                 profiles.push_back(profile);
             }
         }
@@ -71,11 +71,24 @@ Product getProductByID(const string& filename, int ID) {
     throw out_of_range("Товар с указанным идентификатором не найден.");
 }
 
-Profile getProfileByLogin(const string& filename, const string_view& login) {
+bool checkLogin(const string& login)
+{
+    ifstream file("ProfileData.txt");
+    string line;
+    while (getline(file, line)) {
+        Profile<float> profile = Profile<float>::readProfileFromFile(line);
+        if (profile.login == login) {
+            return true;
+        }
+    }
+    return false;
+}
+
+Profile<float> getProfileByLogin(const string& filename, const string_view& login) {
     ifstream file(filename);
     string line;
     while (getline(file, line)) {
-        Profile profile = Profile::readProfileFromFile(line);
+        Profile<float> profile = Profile<float>::readProfileFromFile(line);
         if (profile.login == login) {
             return profile;
         }
@@ -89,41 +102,38 @@ void buyProduct(const string_view& login, int ID)
 {
     string productFilename = "products.txt";
     string profileFilename = "profileData.txt";
-    Product product = getProductByID(productFilename,ID);
-    Profile profile = getProfileByLogin(profileFilename,login);
+    Product product = getProductByID(productFilename, ID);
+    Profile<float> profile = getProfileByLogin(profileFilename, login);
     if (profile.balance < product.price)
     {
         cout << "Недостаточно денег на балансе" << endl;
     }
     else
     {
-        Profile sellerProfile = getProfileByLogin(profileFilename,product.owner);
-        sellerProfile = sellerProfile + product;
+        Profile<float> sellerProfile = getProfileByLogin(profileFilename, product.owner);
+        sellerProfile.balance += product.price;
         product.owner = login;
         product.forSale = 0;
-        deleteProduct(productFilename,product.id);
+        deleteProduct(productFilename, product.id);
         Product::saveProductToFile(product, productFilename);
-        profile = profile - product;
+        profile.balance -= product.price;
         profile.productsAmount++;
         profile.userProducts.push_back(product.id);
-        deleteProfile(profileFilename,login);
-        deleteProfile(profileFilename,sellerProfile.login);
-        Profile::saveProfileToFile(profile,profileFilename);
-        Profile::saveProfileToFile(sellerProfile,profileFilename);
+        deleteProfile(profileFilename, login);
+        deleteProfile(profileFilename, sellerProfile.login);
+        Profile<float>::saveProfileToFile(profile, profileFilename);
+        Profile<float>::saveProfileToFile(sellerProfile, profileFilename);
     }
 }
 
-Product::Product() = default;
-
-
 void buyProductFunc(const string_view& login)
 {
-    viewProducts(login,"products.txt",2);
+    viewProducts(login, "products.txt", 2);
     int choice;
     cout << "Выберите продукт из каталога" << endl;
     cin >> choice;
-    int ID = getID(choice,login,2);
-    buyProduct(login,ID);
+    int ID = getID(choice, login, 2);
+    buyProduct(login, ID);
 }
 
 void depositMoney(const string_view& login, const string& filename)
@@ -131,9 +141,8 @@ void depositMoney(const string_view& login, const string& filename)
     cout << "Выберите сумму взноса" << endl;
     float sum;
     cin >> sum;
-    Profile profile = getProfileByLogin(filename,login);
-    profile.balance += sum;
-    deleteProfile(filename,login);
-    Profile::saveProfileToFile(profile,filename);
+    Profile<float> profile = getProfileByLogin(filename, login);
+    profile.balance = Profile<float>::updateBalance(sum,profile.balance);
+    deleteProfile(filename, login);
+    Profile<float>::saveProfileToFile(profile, filename);
 }
-

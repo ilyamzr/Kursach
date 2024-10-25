@@ -7,4 +7,6 @@ void addProfile();
 void buyProductFunc(const std::string_view& login);
 Product getProductByID(const std::string& filename, int ID);
 void depositMoney(const std::string_view& login, const std::string& filename);
-Profile getProfileByLogin(const std::string& filename, const std::string_view& login);
+Profile<float> getProfileByLogin(const std::string& filename, const std::string_view& login);
+void buyProduct(const std::string_view& login, int ID);
+bool checkLogin(const std::string& login);
