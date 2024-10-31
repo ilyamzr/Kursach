@@ -1,3 +1,5 @@
+[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=ilyamzr_Kursach&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=ilyamzr_Kursach)
+
 # Online store
 
 
