@@ -1,3 +1,5 @@
+[![Quality gate](https://sonarcloud.io/api/project_badges/quality_gate?project=ilyamzr_Kursach)](https://sonarcloud.io/summary/new_code?id=ilyamzr_Kursach)
+
 # Online store
 
 
