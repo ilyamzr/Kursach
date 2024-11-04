@@ -6,6 +6,7 @@
 #include <iostream>
 #include <string_view>
 #include <vector>
+#include <QString>
 
 class Product {
     friend void deleteProduct(const std::string& filename, int deleteNum);
@@ -14,6 +15,7 @@ class Product {
     friend void buyProduct(const std::string_view& login, int ID);
     friend void viewProducts(const std::string_view &login, const std::string &filename, int mode);
     friend std::vector<Product> categoriesSort(const std::string& filename, int category, int subcategory);
+    friend QString updateProductInfo(int index, const std::vector<Product>& products);
 
 private:
     std::string name;

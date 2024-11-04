@@ -1,6 +1,7 @@
 #include <iostream>
 #include <string>
 #include "../header/operationFuncs.h"
+#include "../header/ProductData.h"
 #include "../header/Admin.h"
 
 using namespace std;
@@ -14,7 +15,7 @@ void profileFunc(const string& login)
         cout << "Выберите действие:\n1) Посмотреть информацию профиля\n2) Пополнить баланс \n3) Назад";
         cin >> choice;
         if (choice == 2) {
-            depositMoney(login, filename);
+          //  depositMoney(login, filename);
         } else { if (choice != 3) cout << "Неверный выбор" << endl; }
     }
 }

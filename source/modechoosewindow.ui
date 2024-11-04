@@ -1,0 +1,350 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>modeChooseWindow</class>
+ <widget class="QWidget" name="modeChooseWindow">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>800</width>
+    <height>600</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>modeChooseWindow</string>
+  </property>
+  <widget class="QLabel" name="background">
+   <property name="enabled">
+    <bool>true</bool>
+   </property>
+   <property name="geometry">
+    <rect>
+     <x>-71</x>
+     <y>0</y>
+     <width>871</width>
+     <height>601</height>
+    </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">Qlabel {
+    border: none;
+    background: none;
+    text-shadow: 0 0 5px rgba(0, 255, 0, 0); /* Initial transparent green glow */
+}</string>
+   </property>
+   <property name="frameShape">
+    <enum>QFrame::Shape::NoFrame</enum>
+   </property>
+   <property name="frameShadow">
+    <enum>QFrame::Shadow::Plain</enum>
+   </property>
+   <property name="text">
+    <string/>
+   </property>
+   <property name="pixmap">
+    <pixmap>../resources/bg1.jpg</pixmap>
+   </property>
+   <property name="scaledContents">
+    <bool>true</bool>
+   </property>
+   <property name="alignment">
+    <set>Qt::AlignmentFlag::AlignLeading|Qt::AlignmentFlag::AlignLeft|Qt::AlignmentFlag::AlignVCenter</set>
+   </property>
+   <property name="wordWrap">
+    <bool>false</bool>
+   </property>
+   <property name="openExternalLinks">
+    <bool>false</bool>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="buyerButton">
+   <property name="geometry">
+    <rect>
+     <x>120</x>
+     <y>180</y>
+     <width>241</width>
+     <height>281</height>
+    </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">QPushButton {
+    background-color: rgba(45, 45, 45,0.4); 
+    border: 2px solid rgb(255, 255, 255);
+    border-radius: 35px;
+}
+QPushButton:hover {
+    border: 2px solid rgba(83, 208, 158, 1);
+    background-color: rgb(0, 0 0,0.6); 
+
+}</string>
+   </property>
+   <property name="text">
+    <string/>
+   </property>
+  </widget>
+  <widget class="QLabel" name="introText">
+   <property name="geometry">
+    <rect>
+     <x>318</x>
+     <y>50</y>
+     <width>351</width>
+     <height>151</height>
+    </rect>
+   </property>
+   <property name="font">
+    <font>
+     <family>Yu Gothic UI Light</family>
+     <pointsize>30</pointsize>
+     <bold>false</bold>
+    </font>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">QLabel{
+    border: none;
+    background: none;
+    color: white;
+    font-family: 'Yu Gothic UI Light', sans-serif;
+}</string>
+   </property>
+   <property name="text">
+    <string>Войти как:</string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="introText_2">
+   <property name="geometry">
+    <rect>
+     <x>196</x>
+     <y>-20</y>
+     <width>641</width>
+     <height>151</height>
+    </rect>
+   </property>
+   <property name="font">
+    <font>
+     <family>Yu Gothic UI Light</family>
+     <pointsize>35</pointsize>
+     <bold>false</bold>
+    </font>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">QLabel{
+    border: none;
+    background: none;
+    color: rgb(100, 249, 189);
+    font-family: 'Yu Gothic UI Light', sans-serif;
+}</string>
+   </property>
+   <property name="text">
+    <string>Выбор режима входа</string>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="sellerButton">
+   <property name="geometry">
+    <rect>
+     <x>430</x>
+     <y>180</y>
+     <width>241</width>
+     <height>281</height>
+    </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">QPushButton {
+    background-color: rgba(45, 45, 45,0.4); 
+    border: 2px solid rgb(255, 255, 255);
+    border-radius: 35px;
+}
+QPushButton:hover {
+    border: 2px solid rgba(83, 208, 158, 1);
+    background-color: rgb(0, 0 0,0.6); 
+
+}</string>
+   </property>
+   <property name="text">
+    <string/>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="cancelButton">
+   <property name="geometry">
+    <rect>
+     <x>630</x>
+     <y>530</y>
+     <width>161</width>
+     <height>51</height>
+    </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">/* Custom button style */
+QPushButton {
+    border: none;
+    background: none;
+    color: white;
+    font-family: 'Yu Gothic UI Light', sans-serif;
+    font-size: 30px;
+}
+
+QPushButton:hover {
+    color: #53D09E
+}</string>
+   </property>
+   <property name="text">
+    <string>Назад</string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="buyer">
+   <property name="enabled">
+    <bool>true</bool>
+   </property>
+   <property name="geometry">
+    <rect>
+     <x>110</x>
+     <y>198</y>
+     <width>251</width>
+     <height>261</height>
+    </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">Qlabel {
+    border: none;
+    background: none;
+    text-shadow: 0 0 5px rgba(0, 255, 0, 0); /* Initial transparent green glow */
+}</string>
+   </property>
+   <property name="frameShape">
+    <enum>QFrame::Shape::NoFrame</enum>
+   </property>
+   <property name="frameShadow">
+    <enum>QFrame::Shadow::Plain</enum>
+   </property>
+   <property name="text">
+    <string/>
+   </property>
+   <property name="pixmap">
+    <pixmap>../resources/seller.png</pixmap>
+   </property>
+   <property name="scaledContents">
+    <bool>true</bool>
+   </property>
+   <property name="alignment">
+    <set>Qt::AlignmentFlag::AlignLeading|Qt::AlignmentFlag::AlignLeft|Qt::AlignmentFlag::AlignVCenter</set>
+   </property>
+   <property name="wordWrap">
+    <bool>false</bool>
+   </property>
+   <property name="openExternalLinks">
+    <bool>false</bool>
+   </property>
+  </widget>
+  <widget class="QLabel" name="seller">
+   <property name="enabled">
+    <bool>true</bool>
+   </property>
+   <property name="geometry">
+    <rect>
+     <x>425</x>
+     <y>198</y>
+     <width>251</width>
+     <height>261</height>
+    </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">Qlabel {
+    border: none;
+    background: none;
+    text-shadow: 0 0 5px rgba(0, 255, 0, 0); /* Initial transparent green glow */
+}</string>
+   </property>
+   <property name="frameShape">
+    <enum>QFrame::Shape::NoFrame</enum>
+   </property>
+   <property name="frameShadow">
+    <enum>QFrame::Shadow::Plain</enum>
+   </property>
+   <property name="text">
+    <string/>
+   </property>
+   <property name="pixmap">
+    <pixmap>../resources/buyer.png</pixmap>
+   </property>
+   <property name="scaledContents">
+    <bool>true</bool>
+   </property>
+   <property name="alignment">
+    <set>Qt::AlignmentFlag::AlignLeading|Qt::AlignmentFlag::AlignLeft|Qt::AlignmentFlag::AlignVCenter</set>
+   </property>
+   <property name="wordWrap">
+    <bool>false</bool>
+   </property>
+   <property name="openExternalLinks">
+    <bool>false</bool>
+   </property>
+  </widget>
+  <widget class="QLabel" name="buyerText">
+   <property name="geometry">
+    <rect>
+     <x>160</x>
+     <y>460</y>
+     <width>181</width>
+     <height>61</height>
+    </rect>
+   </property>
+   <property name="font">
+    <font>
+     <family>Yu Gothic UI Light</family>
+     <pointsize>25</pointsize>
+     <bold>false</bold>
+    </font>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">QLabel{
+    border: none;
+    background: none;
+    color: white;
+    font-family: 'Yu Gothic UI Light', sans-serif;
+}</string>
+   </property>
+   <property name="text">
+    <string>Покупатель</string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="sellerText">
+   <property name="geometry">
+    <rect>
+     <x>480</x>
+     <y>460</y>
+     <width>181</width>
+     <height>61</height>
+    </rect>
+   </property>
+   <property name="font">
+    <font>
+     <family>Yu Gothic UI Light</family>
+     <pointsize>25</pointsize>
+     <bold>false</bold>
+    </font>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">QLabel{
+    border: none;
+    background: none;
+    color: white;
+    font-family: 'Yu Gothic UI Light', sans-serif;
+}</string>
+   </property>
+   <property name="text">
+    <string>Продавец</string>
+   </property>
+  </widget>
+  <zorder>background</zorder>
+  <zorder>introText</zorder>
+  <zorder>introText_2</zorder>
+  <zorder>cancelButton</zorder>
+  <zorder>seller</zorder>
+  <zorder>sellerText</zorder>
+  <zorder>buyer</zorder>
+  <zorder>buyerText</zorder>
+  <zorder>buyerButton</zorder>
+  <zorder>sellerButton</zorder>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>

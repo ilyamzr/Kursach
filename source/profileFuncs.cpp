@@ -136,11 +136,8 @@ void buyProductFunc(const string_view& login)
     buyProduct(login, ID);
 }
 
-void depositMoney(const string_view& login, const string& filename)
+void depositMoney(const string_view& login, const string& filename, float sum)
 {
-    cout << "Выберите сумму взноса" << endl;
-    float sum;
-    cin >> sum;
     Profile<float> profile = getProfileByLogin(filename, login);
     profile.balance = Profile<float>::updateBalance(sum,profile.balance);
     deleteProfile(filename, login);
