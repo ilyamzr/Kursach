@@ -19,7 +19,6 @@ Q_OBJECT
 public:
     explicit enterWindow(QWidget *parent = nullptr);
     QString getLogin();
-    QLabel* getLoginLabel();
     ~enterWindow() override;
 
 private:

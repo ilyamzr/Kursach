@@ -26,7 +26,7 @@ void backToMainWindow();
 void buyerFunc(const std::string& login);
 void sellerFunc();
 void modeChooseMenuShow(const std::string& login);
-void lightError(QLineEdit* loginField);
+void lightError(QLineEdit* loginField, const std::string& errorLine, QLabel *errorField);
 
 private:
     Ui::mainwindow *ui;

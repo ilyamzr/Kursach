@@ -2,7 +2,9 @@
 #include <fstream>
 #include "../header/interfaceFuncs.h"
 #include "../header/Profile.h"
+#include "../header/Product.h"
 #include "../header/operationFuncs.h"
+#include "../header/ProductContainer.h"
 
 using namespace std;
 
@@ -58,12 +60,25 @@ void deleteProfile(const string& filename, const string_view& login) {
     updateProfilesInfo(profiles, filename);
 }
 
-Product getProductByID(const string& filename, int ID) {
+/*Product getProductByID(const string& filename, int ID) {
     ifstream file(filename);
     string line;
     while (std::getline(file, line)) {
         Product product = Product::readFromFile(line);
         if (product.id == ID) {
+            return product;
+        }
+    }
+    file.close();
+    throw out_of_range("Товар с указанным идентификатором не найден.");
+}*/
+
+Product getProductByName(const string& filename, string name) {
+    ifstream file(filename);
+    string line;
+    while (std::getline(file, line)) {
+        Product product = Product::readFromFile(line);
+        if (product.name == name) {
             return product;
         }
     }
@@ -75,13 +90,34 @@ bool checkLogin(const string& login)
 {
     ifstream file("ProfileData.txt");
     string line;
+    string errorLine = "Пользователь с таким логином не найден";
     while (getline(file, line)) {
         Profile<float> profile = Profile<float>::readProfileFromFile(line);
         if (profile.login == login) {
             return true;
         }
     }
-    return false;
+    throw errorLine;
+}
+
+void checkPassword(const string& login, const string& password)
+{
+    ifstream file("ProfileData.txt");
+    string line;
+    string errorLine = "Пароль неверный";
+    while (getline(file, line)) {
+        Profile<float> profile = Profile<float>::readProfileFromFile(line);
+        if (profile.login == login) {
+            if (profile.password == password)
+            {
+                break;
+            }
+            else
+            {
+                throw errorLine;
+            }
+        }
+    }
 }
 
 Profile<float> getProfileByLogin(const string& filename, const string_view& login) {
@@ -102,7 +138,7 @@ void buyProduct(const string_view& login, int ID)
 {
     string productFilename = "products.txt";
     string profileFilename = "profileData.txt";
-    Product product = getProductByID(productFilename, ID);
+    Product product = ProductContainer::getProductByID(ID);
     Profile<float> profile = getProfileByLogin(profileFilename, login);
     if (profile.balance < product.price)
     {

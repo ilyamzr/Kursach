@@ -5,8 +5,12 @@ set(CMAKE_CXX_STANDARD 23)
 set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTORCC ON)
 set(CMAKE_AUTOUIC ON)
-set(CMAKE_PREFIX_PATH "C:\\Qt\\6.7.2\\mingw_64")
 
+set(CMAKE_PREFIX_PATH "C:/Users/ASUS/.vcpkg-clion/vcpkg/installed/x64-mingw-dynamic" "C:/Qt/6.7.2/mingw_64")
+
+set(CMAKE_TOOLCHAIN_FILE "C:/Users/ASUS/.vcpkg-clion/vcpkg/scripts/buildsystems/vcpkg.cmake" CACHE STRING "Vcpkg toolchain file")
+
+find_package(jsoncpp CONFIG REQUIRED)
 
 find_package(Qt6 COMPONENTS
         Core
@@ -56,11 +60,17 @@ add_executable(untitled51 source/main.cpp
         source/ioninfo.cpp
         header/ioninfo.h
         source/ioninfo.ui
+        source/ProductContainer.cpp
+        header/ProductContainer.h
+        source/ProductIterator.cpp
+        header/ProductIterator.h
 )
+
 target_link_libraries(untitled51
         Qt::Core
         Qt::Gui
         Qt::Widgets
+        JsonCpp::JsonCpp
 )
 
 if (WIN32 AND NOT DEFINED CMAKE_TOOLCHAIN_FILE)

@@ -26,7 +26,7 @@ public:
     void showAllProducts(const std::string& login);
     void showProfileInfo(const std::string& login);
     void productsCheck(const std::vector <Product>& product, int mode, const std::string& logimn);
-
+    void searchMenu(const std::string& login);
     ~buyerWindow() override;
 private:
     Ui::buyerWindow *ui;

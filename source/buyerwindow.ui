@@ -1776,14 +1776,270 @@ QPushButton:hover {
     <bool>false</bool>
    </property>
   </widget>
-  <widget class="QSpinBox" name="spinBox">
+  <widget class="QLineEdit" name="searchField">
    <property name="geometry">
     <rect>
-     <x>60</x>
+     <x>350</x>
      <y>410</y>
-     <width>121</width>
+     <width>401</width>
+     <height>41</height>
+    </rect>
+   </property>
+   <property name="font">
+    <font>
+     <family>Yu Gothic Light</family>
+     <pointsize>20</pointsize>
+    </font>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">QLineEdit {
+    background-color: rgba(83, 208, 158,0.4); 
+    border: 2px solid rgb(83, 208, 158);
+    border-radius: 10px;
+    padding: 5px; /* Добавление отступа для текста */
+}
+</string>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="searchButton">
+   <property name="geometry">
+    <rect>
+     <x>30</x>
+     <y>360</y>
+     <width>181</width>
+     <height>121</height>
+    </rect>
+   </property>
+   <property name="font">
+    <font>
+     <family>Yu Gothic UI Light</family>
+     <pointsize>27</pointsize>
+    </font>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">/* Custom button style */
+QPushButton {
+    border: none;
+    background: none;
+    color: white;
+    font-family: 'Yu Gothic UI Light', sans-serif;
+}
+
+QPushButton:hover {
+    color: #53D09E
+}</string>
+   </property>
+   <property name="text">
+    <string>Поиск</string>
+   </property>
+  </widget>
+  <widget class="QLineEdit" name="help">
+   <property name="geometry">
+    <rect>
+     <x>350</x>
+     <y>460</y>
+     <width>401</width>
+     <height>41</height>
+    </rect>
+   </property>
+   <property name="font">
+    <font>
+     <family>Yu Gothic Light</family>
+     <pointsize>20</pointsize>
+    </font>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">QLineEdit {
+    background-color: rgba(46, 46, 46,0.5); 
+    border: 2px solid rgb(46, 46, 46);
+    border-radius: 10px;
+    padding: 300px; /* Добавление отступа для текста */
+}
+</string>
+   </property>
+   <property name="text">
+    <string/>
+   </property>
+  </widget>
+  <widget class="QLabel" name="loupe">
+   <property name="enabled">
+    <bool>true</bool>
+   </property>
+   <property name="geometry">
+    <rect>
+     <x>361</x>
+     <y>465</y>
+     <width>31</width>
      <height>31</height>
     </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">Qlabel {
+    border: none;
+    background: none;
+    text-shadow: 0 0 5px rgba(0, 255, 0, 0); /* Initial transparent green glow */
+}</string>
+   </property>
+   <property name="frameShape">
+    <enum>QFrame::Shape::NoFrame</enum>
+   </property>
+   <property name="frameShadow">
+    <enum>QFrame::Shadow::Plain</enum>
+   </property>
+   <property name="text">
+    <string/>
+   </property>
+   <property name="pixmap">
+    <pixmap>../resources/loupe.png</pixmap>
+   </property>
+   <property name="scaledContents">
+    <bool>true</bool>
+   </property>
+   <property name="alignment">
+    <set>Qt::AlignmentFlag::AlignLeading|Qt::AlignmentFlag::AlignLeft|Qt::AlignmentFlag::AlignVCenter</set>
+   </property>
+   <property name="wordWrap">
+    <bool>false</bool>
+   </property>
+   <property name="openExternalLinks">
+    <bool>false</bool>
+   </property>
+  </widget>
+  <widget class="QLabel" name="helpText">
+   <property name="geometry">
+    <rect>
+     <x>400</x>
+     <y>458</y>
+     <width>231</width>
+     <height>41</height>
+    </rect>
+   </property>
+   <property name="font">
+    <font>
+     <family>Yu Gothic UI Light</family>
+     <pointsize>23</pointsize>
+     <bold>false</bold>
+    </font>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">QLabel{
+    border: none;
+    background: none;
+    color: rgb(216, 216, 216);
+    font-family: 'Yu Gothic UI Light', sans-serif;
+    text-shadow: 0 0 5px rgba(0, 255, 0, 0); /* Initial transparent green glow */
+}</string>
+   </property>
+   <property name="text">
+    <string/>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="helpButton">
+   <property name="geometry">
+    <rect>
+     <x>350</x>
+     <y>460</y>
+     <width>401</width>
+     <height>41</height>
+    </rect>
+   </property>
+   <property name="font">
+    <font>
+     <family>Yu Gothic UI Light</family>
+     <pointsize>27</pointsize>
+    </font>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">/* Custom button style */
+QPushButton {
+    border: none;
+    background: none;
+    color: white;
+    font-family: 'Yu Gothic UI Light', sans-serif;
+}
+
+QPushButton:hover {
+    color: #53D09E
+}</string>
+   </property>
+   <property name="text">
+    <string/>
+   </property>
+  </widget>
+  <widget class="QLabel" name="download">
+   <property name="enabled">
+    <bool>true</bool>
+   </property>
+   <property name="geometry">
+    <rect>
+     <x>710</x>
+     <y>450</y>
+     <width>41</width>
+     <height>41</height>
+    </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">Qlabel {
+    border: none;
+    background: none;
+    text-shadow: 0 0 5px rgba(0, 255, 0, 0); /* Initial transparent green glow */
+}</string>
+   </property>
+   <property name="frameShape">
+    <enum>QFrame::Shape::NoFrame</enum>
+   </property>
+   <property name="frameShadow">
+    <enum>QFrame::Shadow::Plain</enum>
+   </property>
+   <property name="text">
+    <string/>
+   </property>
+   <property name="pixmap">
+    <pixmap>../../../CLionProjects/untitled51/resources/download.png</pixmap>
+   </property>
+   <property name="scaledContents">
+    <bool>true</bool>
+   </property>
+   <property name="alignment">
+    <set>Qt::AlignmentFlag::AlignLeading|Qt::AlignmentFlag::AlignLeft|Qt::AlignmentFlag::AlignVCenter</set>
+   </property>
+   <property name="wordWrap">
+    <bool>false</bool>
+   </property>
+   <property name="openExternalLinks">
+    <bool>false</bool>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="downloadButton">
+   <property name="geometry">
+    <rect>
+     <x>710</x>
+     <y>450</y>
+     <width>41</width>
+     <height>41</height>
+    </rect>
+   </property>
+   <property name="font">
+    <font>
+     <family>Yu Gothic UI Light</family>
+     <pointsize>27</pointsize>
+    </font>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">/* Custom button style */
+QPushButton {
+    border: none;
+    background: none;
+    color: white;
+    font-family: 'Yu Gothic UI Light', sans-serif;
+}
+
+QPushButton:hover {
+    color: #53D09E
+}</string>
+   </property>
+   <property name="text">
+    <string/>
    </property>
   </widget>
   <zorder>background</zorder>
@@ -1809,7 +2065,14 @@ QPushButton:hover {
   <zorder>checkProducts</zorder>
   <zorder>depositMoneyButton</zorder>
   <zorder>depositMoney</zorder>
-  <zorder>spinBox</zorder>
+  <zorder>searchField</zorder>
+  <zorder>searchButton</zorder>
+  <zorder>help</zorder>
+  <zorder>loupe</zorder>
+  <zorder>helpText</zorder>
+  <zorder>helpButton</zorder>
+  <zorder>download</zorder>
+  <zorder>downloadButton</zorder>
  </widget>
  <resources/>
  <connections/>

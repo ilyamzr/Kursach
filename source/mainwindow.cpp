@@ -83,7 +83,7 @@ void mainwindow::backToMainWindow() {
     ui->menuContainer->show();
 }
 
-void mainwindow::lightError(QLineEdit* loginField)
+void mainwindow::lightError(QLineEdit* loginField, const std::string& errorLine, QLabel *errorField)
 {
     loginField->setStyleSheet(
             "QLineEdit {"
@@ -93,7 +93,10 @@ void mainwindow::lightError(QLineEdit* loginField)
             "       padding: 5px;"
             "}"
     );
-    QTimer::singleShot(3000, this, [loginField]() {
+    errorField->setVisible(true);
+    QString str = QString::fromStdString(errorLine);
+    errorField->setText(str);
+    QTimer::singleShot(3000, this, [loginField,errorField]() {
         loginField->setStyleSheet(
                 "QLineEdit {"
                 " background-color: rgba(83, 208, 158, 0.2);"
@@ -102,6 +105,7 @@ void mainwindow::lightError(QLineEdit* loginField)
                 "       padding: 5px;"
                 "}"
         );
+        errorField->setVisible(false);
     });
 }
 
@@ -112,6 +116,8 @@ void mainwindow::enterButtonClicked()  {
         enterWindow = new class enterWindow(this);
         auto *enterUI = new Ui::enterWindow;
         enterUI->setupUi(enterWindow);
+        enterUI->errorText1->setVisible(false);
+        enterUI->errorText2->setVisible(false);
         QPixmap bg("C:/Users/ASUS/CLionProjects/untitled51/resources/bg1.png");
         enterUI->background->setPixmap(bg.scaled(ui->background->size(), Qt::KeepAspectRatio, Qt::SmoothTransformation));
         QPixmap neon("C:/Users/ASUS/CLionProjects/untitled51/resources/neon.png");
@@ -127,12 +133,27 @@ void mainwindow::enterButtonClicked()  {
         connect(enterUI->cancelButton, &QPushButton::clicked, this, &mainwindow::backToMainWindow);
         std::string loginText = enterWindow->getLogin().toStdString();
         connect(enterUI->applyButton, &QPushButton::clicked, this, [this, log, enterUI]() {
-            if (checkLogin(enterUI->loginField->text().toStdString())){
-                modeChooseMenuShow(enterUI->loginField->text().toStdString());
+            bool loginSuccessful = false;
+            bool passwordSuccessful = false;
+            try
+            {
+                checkLogin(enterUI->loginField->text().toStdString());
+                loginSuccessful = true;
             }
-            else {
-                lightError(enterUI->loginField);
+            catch (std::string& errorLine)
+            {
+                lightError(enterUI->loginField, errorLine, enterUI->errorText1);
             }
+            try
+            {
+                checkPassword(enterUI->loginField->text().toStdString(), enterUI->passwordField->text().toStdString());
+                passwordSuccessful = true;
+            }
+            catch (std::string& errorLine)
+            {
+                lightError(enterUI->passwordField, errorLine, enterUI->errorText2);
+            }
+            if (loginSuccessful && passwordSuccessful) modeChooseMenuShow(enterUI->loginField->text().toStdString());
         });
         enterWindow->setProperty("ui", QVariant::fromValue(static_cast<void*>(enterUI)));
     }

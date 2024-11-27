@@ -12,5 +12,6 @@ void updateProductsInfo(const std::vector<Product>& products, const std::string&
 void addProductFunc(const std::string_view& login);
 void deleteProductFunc(const std::string_view& login);
 void categoriesFunc(const std::string& filename);
+void createJsonOutput(const std::string& login,const Product& product);
 std::vector<Product> categoriesSort(const std::string& filename, int category, int subcategory);
-
+std::vector<Product> getProducts();

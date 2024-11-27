@@ -408,6 +408,62 @@ QPushButton:hover {
     <string/>
    </property>
   </widget>
+  <widget class="QLabel" name="errorText1">
+   <property name="geometry">
+    <rect>
+     <x>250</x>
+     <y>328</y>
+     <width>331</width>
+     <height>20</height>
+    </rect>
+   </property>
+   <property name="font">
+    <font>
+     <family>Yu Gothic UI Light</family>
+     <pointsize>12</pointsize>
+     <bold>false</bold>
+    </font>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">QLabel{
+    border: none;
+    background: none;
+    color: red;
+    font-family: 'Yu Gothic UI Light', sans-serif;
+}</string>
+   </property>
+   <property name="text">
+    <string/>
+   </property>
+  </widget>
+  <widget class="QLabel" name="errorText2">
+   <property name="geometry">
+    <rect>
+     <x>250</x>
+     <y>417</y>
+     <width>331</width>
+     <height>20</height>
+    </rect>
+   </property>
+   <property name="font">
+    <font>
+     <family>Yu Gothic UI Light</family>
+     <pointsize>12</pointsize>
+     <bold>false</bold>
+    </font>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">QLabel{
+    border: none;
+    background: none;
+    color: red;
+    font-family: 'Yu Gothic UI Light', sans-serif;
+}</string>
+   </property>
+   <property name="text">
+    <string/>
+   </property>
+  </widget>
  </widget>
  <resources/>
  <connections/>

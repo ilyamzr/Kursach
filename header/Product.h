@@ -10,12 +10,14 @@
 
 class Product {
     friend void deleteProduct(const std::string& filename, int deleteNum);
-    friend Product getProductByID(const std::string& filename, int ID);
     friend int getID(int deletedNum, const std::string_view& login, int mode);
     friend void buyProduct(const std::string_view& login, int ID);
     friend void viewProducts(const std::string_view &login, const std::string &filename, int mode);
     friend std::vector<Product> categoriesSort(const std::string& filename, int category, int subcategory);
     friend QString updateProductInfo(int index, const std::vector<Product>& products);
+    friend QString searchForMatches(const QString &input);
+    friend Product getProductByName(const std::string& filename, std::string name);
+    friend void createJsonOutput(const std::string& login,const Product& product);
 
 private:
     std::string name;
@@ -41,6 +43,8 @@ public:
     {
         return product.id;
     }
+    static std::string getProductCategory(int category);
+    static std::string getProductSubCategory(int subcategory,int category);
     virtual void printError();
 };
 
