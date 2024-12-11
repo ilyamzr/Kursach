@@ -7,17 +7,19 @@
 #include <string_view>
 #include <vector>
 #include <QString>
+#include <random>
 
 class Product {
     friend void deleteProduct(const std::string& filename, int deleteNum);
     friend int getID(int deletedNum, const std::string_view& login, int mode);
     friend void buyProduct(const std::string_view& login, int ID);
     friend void viewProducts(const std::string_view &login, const std::string &filename, int mode);
-    friend std::vector<Product> categoriesSort(const std::string& filename, int category, int subcategory);
+    friend std::vector<Product> categoriesSort(const std::string& filename, int category, int subcategory, const std::string& login);
     friend QString updateProductInfo(int index, const std::vector<Product>& products);
-    friend QString searchForMatches(const QString &input);
+    friend std::vector<std::string> searchForMatches(const QString &input);
     friend Product getProductByName(const std::string& filename, std::string name);
-    friend void createJsonOutput(const std::string& login,const Product& product);
+    friend std::vector<Product> getProductsByName(const std::string& filename, std::vector<std::string> name);
+    friend void createJsonOutput(const std::string& login, const std::vector<Product>& products);
 
 private:
     std::string name;
@@ -42,6 +44,10 @@ public:
     static int getID(Product const &product)
     {
         return product.id;
+    }
+    static std::string getOwner(Product const &product)
+    {
+        return product.owner;
     }
     static std::string getProductCategory(int category);
     static std::string getProductSubCategory(int subcategory,int category);

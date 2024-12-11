@@ -10,8 +10,7 @@ public:
     virtual void printError() = 0;
 
     static void addProductFunc(const std::string& login) {
-        Product product = addProduct(login);
-        Product::saveProductToFile(product, "products.txt");
+      
     }
 
     static void deleteProductFunc(const std::string& login) {

@@ -6,7 +6,6 @@
 #ifndef PROFILECLASS_H
 #define PROFILECLASS_H
 
-template <typename T>
 class Profile {
     friend void buyProduct(const std::string_view& login, int ID);
     friend Profile getProfileByLogin(const std::string& filename, const std::string_view& login);
@@ -18,14 +17,12 @@ class Profile {
 
 private:
     std::string login;
-    T balance{};
-    int productsAmount{};
-    std::vector<int> userProducts;
+    float balance{};
     std::string password;
 
 public:
-    Profile(std::string l, std::string p, T b, int pa, std::vector<int> up)
-            : login(std::move(l)), balance(b), productsAmount(pa), userProducts(std::move(up)), password(std::move(p)) {}
+    Profile(std::string l, std::string p, float b)
+            : login(std::move(l)), balance(b), password(std::move(p)) {}
 
     Profile() = default;
 
@@ -34,8 +31,8 @@ public:
     }
 
     template <typename U>
-    static U updateBalance(U amount, T profileBalance) {
-        U balance = static_cast<T>(amount) + profileBalance;
+    static U updateBalance(U amount, float profileBalance) {
+        U balance = static_cast<float>(amount) + profileBalance;
         return balance;
     }
 
@@ -43,10 +40,6 @@ public:
 
     static void saveProfileToFile(const Profile& profile, const std::string& filename);
     static Profile readProfileFromFile(std::string line);
-    static std::vector<int> getProducts(const Profile& profile) {
-        return profile.userProducts;
-    }
-
 };
 
 #endif

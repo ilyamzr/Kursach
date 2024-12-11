@@ -2,7 +2,6 @@
 #include <string>
 #include "fstream"
 #include <vector>
-#include <random>
 #include "../header/interfaceFuncs.h"
 #include <json/json.h>
 
@@ -16,35 +15,6 @@ string getWord(string &line)
         line = line.substr(pos + 1);
     }
     return word;
-}
-
-Product addProduct(string_view login)
-{
-    cout << "Введите название продукта: ";
-    string name;
-    _flushall();
-    getline(cin,name);
-    printCategories();
-    cout << "Выберите категорию продукта: ";
-    int category;
-    cin >> category;
-    cout << "Выберите подкатегорию: " << endl;
-    printSubCategories(category-1);
-    int subcategory;
-    cin >> subcategory;
-    cout << "Установите цену продукта: ";
-    float price;
-    cin >> price;
-    cout << "Создайте описание товара: ";
-    string descriprion;
-    _flushall();
-    getline(cin,descriprion);
-    random_device rd;
-    mt19937 gen(rd());
-    uniform_int_distribution dis(1, 999999);
-    int id = dis(gen);
-    Product product(name,category,subcategory,price,descriprion,id,login);
-    return product;
 }
 
 void viewProducts(const string_view &login, const string &filename, int mode)
@@ -89,12 +59,13 @@ void updateProductsInfo(const vector<Product>& products, const string& filename)
 void deleteProduct(const string& filename, int ID) {
     ifstream file(filename);
     vector<Product> products;
+    cout << "|" << ID << "|";
     if (file.is_open()) {
         while (file.good()) {
             string line;
             getline(file,line);
             Product product = Product::readFromFile(line);
-            if (product.id != ID) {
+            if (product.id != ID && !product.name.empty()) {
                 products.push_back(product);
             }
         }
@@ -103,7 +74,24 @@ void deleteProduct(const string& filename, int ID) {
     updateProductsInfo(products, filename);
 }
 
-vector<Product> categoriesSort(const string& filename,  int category,  int subcategory)
+vector<Product> getMyProducts(const std::string& login){
+    ifstream file("products.txt");
+
+    int ID = -1;
+    int count = 0;
+    string line;
+    vector<Product> products;
+    while (getline(file, line)) {
+        Product product = Product::readFromFile(line);
+        if (Product::getOwner(product) == login) {
+            products.push_back(product);
+        }
+    }
+    file.close();
+    return products;
+}
+
+vector<Product> categoriesSort(const string& filename,  int category,  int subcategory, const std::string& login)
 {
     ifstream file(filename);
     if (!file.is_open()) {
@@ -111,31 +99,16 @@ vector<Product> categoriesSort(const string& filename,  int category,  int subca
     }
     string line;
     string word;
-    int flag = 0;
-    int i = 0;
     vector<Product> products;
     while (getline(file, line)) {
         Product product = Product::readFromFile(line);
-        if (product.category == category && product.subcategory == subcategory) {
-            i++;
-            cout << "\n" << i << ")";
-            if (product.forSale != 0)
-            {
-                products.push_back(product);
-                Product::printProductInfo(product);
-            }
-            flag = 1;
+        if (product.category == category && product.subcategory == subcategory && product.forSale != 0 && product.owner != login) {
+            products.push_back(product);
         }
     }
-    if (flag == 0) cout << "Таких товаров нет =(" << endl;
     return products;
 }
 
-void addProductFunc(const string_view& login)
-{
-    Product newProduct = addProduct(login);
-    Product::saveProductToFile(newProduct, "products.txt");
-}
 
 int getID(int deletedNum, const std::string_view &login, int mode) {
     ifstream file("products.txt");
@@ -147,11 +120,12 @@ int getID(int deletedNum, const std::string_view &login, int mode) {
     while (getline(file, line)) {
         Product product = Product::readFromFile(line);
         if ((product.owner == login && mode == 1) || (product.owner != login && mode == 2)) {
-            count++;
+            cout << "/" << product.id << "/" << endl;
             if (count == deletedNum) {
                 ID = product.id;
                 break;
             }
+            count++;
         }
     }
 
@@ -163,48 +137,6 @@ int getID(int deletedNum, const std::string_view &login, int mode) {
 
     return ID;
 }
-
-void deleteProductFunc(const string_view& login)
-{
-    viewProducts(login,"products.txt",1);
-    cout << "Выберите товар, который хотите удалить";
-    int deletedNum;
-    cin >> deletedNum;
-    int ID = getID(deletedNum,login,1);
-    deleteProduct("products.txt",ID);
-}
-
-void categoriesFunc(const string& filename)
-{
-    printCategories();
-    cout << "Выберите категорию" << endl;
-    int category;
-    cin >> category;
-    printSubCategories(category-1);
-    cout << "Выберите подкатегорию" << endl;
-    int subcategory;
-    cin >> subcategory;
-    categoriesSort(filename,category,subcategory);
-}
-
-/*vector<Product> getProducts()
-{
-    ifstream file("products.txt");
-    if (!file.is_open()) {
-        cout << "Не удалось открыть файл: " << endl;
-    }
-    string line;
-    vector<Product> products;
-    while (getline(file, line)) {
-        if (!line.empty())
-        {
-            Product product = Product::readFromFile(line);
-            products.push_back(product);
-        }
-    }
-    file.close();
-    return products;
-}*/
 
 const std::array<std::array<std::string, 6>, 9> allCategories = {{
                                                                          {"Техника", "Смартфон", "Ноутбуки", "Телевизоры", "Бытовая техника", "Аудио и видео техника"},
@@ -218,7 +150,7 @@ const std::array<std::array<std::string, 6>, 9> allCategories = {{
                                                                  }};
 
 
-void createJsonOutput(const std::string& login, const Product& product)
+void createJsonOutput(const std::string& login, const std::vector<Product>& products)
 {
     QString userFileName = QString::fromStdString(login) + ".json";
     Json::Value jsonData;
@@ -229,20 +161,16 @@ void createJsonOutput(const std::string& login, const Product& product)
         in.close();
     }
 
-    for (const auto& existingProduct : jsonData) {
-        if (existingProduct["ID"] == product.id) {
-            return;
-        }
+    for (const auto& product : products) {
+        Json::Value jsonProduct;
+        jsonProduct["name"] = product.name;
+        jsonProduct["category"] = product.category;
+        jsonProduct["subcategory"] = product.subcategory;
+        jsonProduct["price"] = product.price;
+        jsonProduct["ID"] = product.id;
+
+        jsonData.append(jsonProduct);
     }
-
-    Json::Value jsonProduct;
-    jsonProduct["name"] = product.name;
-    jsonProduct["category"] = product.category;
-    jsonProduct["subcategory"] = product.subcategory;
-    jsonProduct["price"] = product.price;
-    jsonProduct["ID"] = product.id;
-
-    jsonData.append(jsonProduct);
 
     std::ofstream out(userFileName.toStdString());
     out << jsonData;

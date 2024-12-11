@@ -18,24 +18,23 @@ auto addProfile()
     string password;
     _flushall();
     getline(cin, password);
-    vector<int> userProducts;
-    Profile profile(login, password, 0.0f, 0, userProducts);
+    Profile profile(login, password, 0.0f);
     return profile;
 }
 
 void createNewProfile()
 {
     string filename = "profileData.txt";
-    Profile<float> profile = addProfile();
-    Profile<float>::saveProfileToFile(profile, filename);
+    Profile profile = addProfile();
+    Profile::saveProfileToFile(profile, filename);
 }
 
-void updateProfilesInfo(const vector<Profile<float>>& profiles, const string& filename)
+void updateProfilesInfo(const vector<Profile>& profiles, const string& filename)
 {
     ofstream file(filename);
     if (file.is_open()) {
-        for (const Profile<float>& profile : profiles) {
-            Profile<float>::saveProfileToFile(profile, filename);
+        for (const Profile& profile : profiles) {
+            Profile::saveProfileToFile(profile, filename);
         }
         file.close();
     } else {
@@ -45,13 +44,13 @@ void updateProfilesInfo(const vector<Profile<float>>& profiles, const string& fi
 
 void deleteProfile(const string& filename, const string_view& login) {
     ifstream file(filename);
-    vector<Profile<float>> profiles;
+    vector<Profile> profiles;
     if (file.is_open()) {
         while (file.good()) {
             string line;
             getline(file, line);
-            Profile<float> profile = Profile<float>::readProfileFromFile(line);
-            if (profile.login != login) {
+            Profile profile = Profile::readProfileFromFile(line);
+            if (profile.login != login && !profile.login.empty()) {
                 profiles.push_back(profile);
             }
         }
@@ -86,13 +85,30 @@ Product getProductByName(const string& filename, string name) {
     throw out_of_range("Товар с указанным идентификатором не найден.");
 }
 
+vector<Product> getProductsByName(const string& filename, vector<string> names) {
+    ifstream file(filename);
+    string line;
+    vector<Product> products;
+    while (std::getline(file, line)) {
+        Product product = Product::readFromFile(line);
+        for (int i = 0; i < names.size();i++)
+        {
+            if (product.name == names[i]) {
+                products.push_back(getProductByName(filename,names[i]));
+            }
+        }
+    }
+    file.close();
+    return products;
+}
+
 bool checkLogin(const string& login)
 {
     ifstream file("ProfileData.txt");
     string line;
     string errorLine = "Пользователь с таким логином не найден";
     while (getline(file, line)) {
-        Profile<float> profile = Profile<float>::readProfileFromFile(line);
+        Profile profile = Profile::readProfileFromFile(line);
         if (profile.login == login) {
             return true;
         }
@@ -106,7 +122,7 @@ void checkPassword(const string& login, const string& password)
     string line;
     string errorLine = "Пароль неверный";
     while (getline(file, line)) {
-        Profile<float> profile = Profile<float>::readProfileFromFile(line);
+        Profile profile = Profile::readProfileFromFile(line);
         if (profile.login == login) {
             if (profile.password == password)
             {
@@ -120,11 +136,11 @@ void checkPassword(const string& login, const string& password)
     }
 }
 
-Profile<float> getProfileByLogin(const string& filename, const string_view& login) {
+Profile getProfileByLogin(const string& filename, const string_view& login) {
     ifstream file(filename);
     string line;
     while (getline(file, line)) {
-        Profile<float> profile = Profile<float>::readProfileFromFile(line);
+        Profile profile = Profile::readProfileFromFile(line);
         if (profile.login == login) {
             return profile;
         }
@@ -139,43 +155,33 @@ void buyProduct(const string_view& login, int ID)
     string productFilename = "products.txt";
     string profileFilename = "profileData.txt";
     Product product = ProductContainer::getProductByID(ID);
-    Profile<float> profile = getProfileByLogin(profileFilename, login);
+    Profile profile = getProfileByLogin(profileFilename, login);
     if (profile.balance < product.price)
     {
         cout << "Недостаточно денег на балансе" << endl;
     }
     else
     {
-        Profile<float> sellerProfile = getProfileByLogin(profileFilename, product.owner);
+        Profile sellerProfile = getProfileByLogin(profileFilename, product.owner);
+        cout << "Логин: " << sellerProfile.login << endl;
         sellerProfile.balance += product.price;
         product.owner = login;
         product.forSale = 0;
+        cout << "Продукт: " << product.name << endl;
         deleteProduct(productFilename, product.id);
         Product::saveProductToFile(product, productFilename);
         profile.balance -= product.price;
-        profile.productsAmount++;
-        profile.userProducts.push_back(product.id);
         deleteProfile(profileFilename, login);
         deleteProfile(profileFilename, sellerProfile.login);
-        Profile<float>::saveProfileToFile(profile, profileFilename);
-        Profile<float>::saveProfileToFile(sellerProfile, profileFilename);
+        Profile::saveProfileToFile(profile, profileFilename);
+        Profile::saveProfileToFile(sellerProfile, profileFilename);
     }
-}
-
-void buyProductFunc(const string_view& login)
-{
-    viewProducts(login, "products.txt", 2);
-    int choice;
-    cout << "Выберите продукт из каталога" << endl;
-    cin >> choice;
-    int ID = getID(choice, login, 2);
-    buyProduct(login, ID);
 }
 
 void depositMoney(const string_view& login, const string& filename, float sum)
 {
-    Profile<float> profile = getProfileByLogin(filename, login);
-    profile.balance = Profile<float>::updateBalance(sum,profile.balance);
+    Profile profile = getProfileByLogin(filename, login);
+    profile.balance = Profile::updateBalance(sum,profile.balance);
     deleteProfile(filename, login);
-    Profile<float>::saveProfileToFile(profile, filename);
+    Profile::saveProfileToFile(profile, filename);
 }

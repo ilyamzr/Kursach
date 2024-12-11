@@ -10,6 +10,7 @@
 #include <QString>
 #include <QComboBox>
 #include "../header/Product.h"
+#include "modeChooseWindow.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class buyerWindow; }
@@ -19,7 +20,7 @@ class buyerWindow : public QWidget {
 Q_OBJECT
 
 public:
-    explicit buyerWindow(std::string  login, QWidget *parent = nullptr);
+    explicit buyerWindow(std::string login, QWidget *parent = nullptr);
     void showCategories(const std::string& login);
     void showSubcategory(int index,const std::string& login);
     void sortProductsByCategory(int categoryIndex, int subCategoryIndex, const std::string& login);
@@ -31,6 +32,7 @@ public:
 private:
     Ui::buyerWindow *ui;
     std::string userLogin;
+    modeChooseWindow *modeWindow;
 };
 
 

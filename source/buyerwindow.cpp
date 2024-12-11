@@ -1,7 +1,8 @@
-#include "../header/buyerwindow.h"
+#include "ui_modeChooseWindow.h"
 #include "../header/profileFuncs.h"
 #include "../header/operationFuncs.h"
 #include "../header/ProductIterator.h"
+#include "../header/mainwindow.h"
 #include <QPropertyAnimation>
 #include "ui_buyerWindow.h"
 #include <QVBoxLayout>
@@ -22,13 +23,11 @@ const std::array<std::array<std::string, 6>, 9> allCategories = {{
     {"Женщинам", "Одежда", "Обувь", "Аксессуары", "Косметика", "Парфюмерия"},
 }};
 
-QString updateProfileInfo(const Profile<float>& profile) {
+QString updateProfileInfo(const Profile& profile) {
     QString inf = QString("Логин: %1\n")
                           .arg(QString::fromStdString(profile.login)) +
                       QString("Баланс: %1$\n")
-                          .arg(QString::number(profile.balance)) +
-                  QString("Количество товаров: %1\n")
-                          .arg(QString::number(profile.productsAmount));
+                          .arg(QString::number(profile.balance));
     return inf;
 }
 
@@ -38,8 +37,8 @@ QString updateProductInfo(int index, const vector<Product>& products) {
     QString inf = QString("Наименование продукта: %1\n")
                           .arg(QString::fromStdString(products[index].name)) +
                   QString("%1/%2\n")
-                          .arg(QString::fromStdString(allCategories[products[index].category - 1][0]),
-                               QString::fromStdString(allCategories[products[index].category - 1][products[index].subcategory])) +
+                          .arg(QString::fromStdString(allCategories[products[index].category][0]),
+                               QString::fromStdString(allCategories[products[index].category][products[index].subcategory + 1])) +
                   QString("Цена: %1$\n")
                           .arg(QString::number(products[index].price)) +
                   QString("Описание: %1\n")
@@ -49,23 +48,19 @@ QString updateProductInfo(int index, const vector<Product>& products) {
     return inf;
 }
 
-QString searchForMatches(const QString &input) {
+vector<string> searchForMatches(const QString &input) {
     std::vector<Product> products = ProductContainer::getAllProducts();
-
-    if (input.isEmpty()) {
-        return "";
-    }
+    vector<string> newProducts;
     ProductIterator iterator = ProductIterator(ProductContainer(products));
     while (iterator.hasNext()) {
         Product product = iterator.next();
-        std::cout << product.name << std::endl;
         QString productName = QString::fromStdString(product.name);
         if (productName.startsWith(input, Qt::CaseInsensitive)) {
-            return productName;
+            newProducts.push_back(product.name);
         }
     }
 
-    return "";
+    return newProducts;
 }
 
 void buyerWindow::searchMenu(const string& login){
@@ -83,31 +78,38 @@ void buyerWindow::searchMenu(const string& login){
     ui->helpButton->setVisible(false);
     ui->download->setVisible(false);
     ui->downloadButton->setVisible(false);
+    ui->leftButton->setVisible(false);
+    ui->left->setVisible(false);
+    ui->rightButton->setVisible(false);
+    ui->right->setVisible(false);
+
+    disconnect(ui->helpButton, &QPushButton::clicked, this, nullptr);
+    disconnect(ui->downloadButton, &QPushButton::clicked, this, nullptr);
 
     connect(ui->searchField, &QLineEdit::textChanged, this, [this,login](const QString &text) {
-        QString suggestion = searchForMatches(text);
-        if (suggestion.isEmpty())
+        vector<string> suggestion = searchForMatches(text);
+        if (suggestion.empty())
         {
             ui->helpText->setVisible(false);
             ui->help->setVisible(false);
             ui->loupe->setVisible(false);
         }
         else {
-            ui->helpText->setText(suggestion);
+            ui->helpText->setText(QString::fromStdString(suggestion[0]));
             ui->helpText->setVisible(true);
             ui->help->setVisible(true);
             ui->loupe->setVisible(true);
             ui->helpButton->setVisible(true);
             connect(ui->helpButton, &QPushButton::clicked, this, [this,suggestion]() {
-                ui->searchField->setText(suggestion);
+                ui->searchField->setText(QString::fromStdString(suggestion[0]));
             });
         }
         connect(ui->searchField, &QLineEdit::returnPressed, this, [this,login,suggestion]() {
-            if (ui->searchField->text() == suggestion)
+            if (ui->searchField->text() == QString::fromStdString(suggestion[0]))
             {
                 string name = ui->searchField->text().toStdString();
-                vector<Product> products;
-                products.push_back(getProductByName("products.txt",name));
+                vector<Product> products = getProductsByName("products.txt",suggestion);
+
                 productsCheck(products,0, login);
                 ui->download->setVisible(true);
                 ui->downloadButton->setVisible(true);
@@ -116,8 +118,9 @@ void buyerWindow::searchMenu(const string& login){
     });
     connect(ui->downloadButton, &QPushButton::clicked, this, [this,login]() {
         string name = ui->searchField->text().toStdString();
-        Product product = getProductByName("products.txt",name);
-        createJsonOutput(login, product);
+        vector<string> suggestion = searchForMatches(QString::fromStdString(name));
+        vector<Product> products = getProductsByName("products.txt",suggestion);
+        createJsonOutput(login, products);
         ui->download->setVisible(false);
         ui->downloadButton->setVisible(false);
     });
@@ -126,6 +129,9 @@ void buyerWindow::searchMenu(const string& login){
 void buyerWindow::productsCheck(const vector<Product>& products, int mode, const string& login)
 {
     if (!products.empty()) {
+
+        disconnect(ui->leftButton, &QPushButton::clicked, this, nullptr);
+        disconnect(ui->rightButton, &QPushButton::clicked, this, nullptr);
         ui->productInfo->setStyleSheet(
                 "QTextEdit {"
                 "  background: transparent;"
@@ -168,28 +174,34 @@ void buyerWindow::productsCheck(const vector<Product>& products, int mode, const
 
         if (products.size() > 1)
         {
-            connect(ui->rightButton, &QPushButton::clicked, this, [this, i, products, login]() mutable {
-                if (++i > products.size() - 1) {
-                    i = 0;
+            auto index = std::make_shared<int>(i);
+
+            connect(ui->rightButton, &QPushButton::clicked, this, [this, index, products, login]() mutable {
+                disconnect(ui->buyButton, &QPushButton::clicked, this, nullptr);
+                if (++(*index) > products.size() - 1) {
+                    *index = 0;
                 }
+                std::cout << "E ";
                 QString inf;
-                inf = updateProductInfo(i, products);
+                inf = updateProductInfo(*index, products);
                 ui->productInfo->setPlainText(inf);
-                connect(ui->buyButton, &QPushButton::clicked, this, [i, login, products]() mutable {
-                    int id = __gnu_cxx::__alloc_traits<std::allocator<Product>>::value_type::getID(products[i]);
+                connect(ui->buyButton, &QPushButton::clicked, this, [index, login, products]() mutable {
+                    int id = __gnu_cxx::__alloc_traits<std::allocator<Product>>::value_type::getID(products[*index]);
                     buyProduct(login, id);
                 });
             });
 
-            connect(ui->leftButton, &QPushButton::clicked, this, [this, i, products, login]() mutable {
-                if (--i < 0) {
-                    i = static_cast<int>(products.size()) - 1;
+            connect(ui->leftButton, &QPushButton::clicked, this, [this, index, products, login]() mutable {
+                disconnect(ui->buyButton, &QPushButton::clicked, this, nullptr);
+                if (--(*index) < 0) {
+                    *index = static_cast<int>(products.size()) - 1;
                 }
                 QString inf;
-                inf = updateProductInfo(i, products);
+                inf = updateProductInfo(*index, products);
                 ui->productInfo->setPlainText(inf);
-                connect(ui->buyButton, &QPushButton::clicked, this, [i, login]() mutable {
-                    buyProduct(login, i);
+                connect(ui->buyButton, &QPushButton::clicked, this, [index, login, products]() mutable {
+                    int id = __gnu_cxx::__alloc_traits<std::allocator<Product>>::value_type::getID(products[*index]);
+                    buyProduct(login, id);
                 });
             });
         }
@@ -198,6 +210,7 @@ void buyerWindow::productsCheck(const vector<Product>& products, int mode, const
 
 void buyerWindow::showProfileInfo(const string& login)
 {
+    ui->searchField->clear();
     Profile profile = getProfileByLogin("ProfileData.txt",login);
     QString info = updateProfileInfo(profile);
 
@@ -233,22 +246,14 @@ void buyerWindow::showProfileInfo(const string& login)
         );
         ui->productInfo->setPlainText(info);
         ui->productInfo->setVisible(true);
-        vector<int> productIds = Profile<float>::getProducts(profile);
         vector<Product> products;
-        for (int productId : productIds)
-        {
-            products.push_back(ProductContainer::getProductByID(productId));
-        }
-        connect(ui->checkProducts, &QPushButton::clicked, this, [this, products, login]() mutable {
-            productsCheck(products,1,login);
-    });
     connect(ui->depositMoneyButton, &QPushButton::clicked, this, [this, products, login]() mutable {
         productsCheck(products,1,login);
     });
 }
 
 void buyerWindow::sortProductsByCategory(int categoryIndex, int subCategoryIndex, const string& login) {
-    vector<Product> products = categoriesSort("products.txt", categoryIndex + 1, subCategoryIndex + 1);
+    vector<Product> products = categoriesSort("products.txt", categoryIndex, subCategoryIndex, login);
     if (products.empty()) {
         ui->applyButton->setStyleSheet(
                 "QPushButton {"
@@ -285,6 +290,7 @@ void buyerWindow::sortProductsByCategory(int categoryIndex, int subCategoryIndex
 
 void buyerWindow::showAllProducts(const string& login)
 {
+    ui->searchField->clear();
     ifstream file("products.txt");
     if (!file.is_open()) {
         cout << "Не удалось открыть файл: " << endl;
@@ -297,7 +303,7 @@ void buyerWindow::showAllProducts(const string& login)
         if (!line.empty())
         {
             Product product = Product::readFromFile(line);
-            products.push_back(product);
+            if (Product::getOwner(product) != login) products.push_back(product);
         }
     }
     productsCheck(products,0, login);
@@ -308,6 +314,9 @@ void buyerWindow::showSubcategory(int index, const string& login){
     ui->categoriesChoosed->setVisible(true);
     ui->subCategories->setVisible(true);
     ui->subCategories->clear();
+
+    disconnect(ui->applyButton, &QPushButton::clicked, this, nullptr);
+    disconnect(ui->backFromSCButton, &QPushButton::clicked, this, nullptr);
 
     for (int i = 1; i < 6; i++)
     {
@@ -327,6 +336,7 @@ void buyerWindow::showSubcategory(int index, const string& login){
 
 void buyerWindow::showCategories(const string& login)
 {
+    ui->searchField->clear();
     ui->categoriesChoosed->setVisible(false);
     ui->subCategories->setVisible(false);
     ui->categories->setVisible(true);
@@ -433,7 +443,7 @@ void buyerWindow::showCategories(const string& login)
 }
 
 buyerWindow::buyerWindow(string login,QWidget *parent) :
-        QWidget(parent), ui(new Ui::buyerWindow), userLogin(std::move(login)) {
+        QWidget(parent), ui(new Ui::buyerWindow), userLogin(std::move(login)), modeWindow(nullptr) {
     login = userLogin;
     ui->setupUi(this);
     ui->categoriesChoosed->setVisible(false);
@@ -478,6 +488,11 @@ buyerWindow::buyerWindow(string login,QWidget *parent) :
     });
     connect(ui->searchButton, &QPushButton::clicked, this, [this, login]() {
         searchMenu(login);
+    });
+    connect(ui->backButton, &QPushButton::clicked, this, [this,login]() {
+        this->close();
+        mainwindow mw;
+        mw.modeChooseMenuShow(login);
     });
 }
 

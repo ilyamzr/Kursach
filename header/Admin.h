@@ -6,10 +6,10 @@
 #ifndef UNTITLED51_ADMIN_H
 #define UNTITLED51_ADMIN_H
 
-class Admin : public Profile<float>, public ProfileControl {
+class Admin : public Profile, public ProfileControl {
 public:
-    Admin(std::string l, std::string p, float b, int pa, std::vector<int> up)
-            : Profile(std::move(l), std::move(p), b, pa, std::move(up)) {}
+    Admin(std::string l, std::string p, float b)
+            : Profile(std::move(l), std::move(p), b) {}
 
     static void resetUserPassword() {
         std::string log;

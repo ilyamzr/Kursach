@@ -234,7 +234,7 @@ QPushButton:hover {
 </string>
    </property>
   </widget>
-  <widget class="QLineEdit" name="lineEdit_2">
+  <widget class="QLineEdit" name="passwordField">
    <property name="geometry">
     <rect>
      <x>240</x>
@@ -354,7 +354,7 @@ QPushButton:hover {
   <zorder>introText_2</zorder>
   <zorder>loginField</zorder>
   <zorder>introText</zorder>
-  <zorder>lineEdit_2</zorder>
+  <zorder>passwordField</zorder>
   <zorder>login</zorder>
   <zorder>password</zorder>
  </widget>

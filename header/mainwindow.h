@@ -7,6 +7,7 @@
 #include "regwindow.h"
 #include "modeChooseWindow.h"
 #include "buyerwindow.h"
+#include "sellerwindow.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class mainwindow; }
@@ -20,13 +21,15 @@ public:
     ~mainwindow() override;
 
 private slots:
-void enterButtonClicked();
-void regButtonClicked();
-void backToMainWindow();
-void buyerFunc(const std::string& login);
-void sellerFunc();
-void modeChooseMenuShow(const std::string& login);
-void lightError(QLineEdit* loginField, const std::string& errorLine, QLabel *errorField);
+    void enterButtonClicked();
+    void regButtonClicked();
+    void buyerFunc(const std::string& login);
+    void sellerFunc(const std::string& login);
+    void lightError(QLineEdit* loginField, const std::string& errorLine, QLabel *errorField);
+
+public slots:
+    void backToMainWindow();
+    void modeChooseMenuShow(const std::string& login);
 
 private:
     Ui::mainwindow *ui;
@@ -34,6 +37,7 @@ private:
     regWindow *regWindow;
     modeChooseWindow *modeWindow;
     buyerWindow *buyerWindow;
+    sellerwindow *sellerWindow;
 };
 
 

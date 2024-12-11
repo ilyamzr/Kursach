@@ -10,9 +10,11 @@
 #include "ui_buyerWindow.h"
 #include <QTimer>
 #include "../header/Admin.h"
+#include "ui_sellerwindow.h"
 
 mainwindow::mainwindow(QWidget *parent) :
-        QWidget(parent), ui(new Ui::mainwindow), enterWindow(nullptr), regWindow(nullptr), modeWindow(nullptr), buyerWindow(nullptr) {
+        QWidget(parent), ui(new Ui::mainwindow), enterWindow(nullptr), regWindow(nullptr), modeWindow(nullptr), buyerWindow(nullptr),sellerWindow(
+        nullptr) {
     ui->setupUi(this);
 
     QPixmap logo("C:/Users/ASUS/CLionProjects/untitled51/resources/logo3.png");
@@ -35,24 +37,19 @@ mainwindow::~mainwindow() {
 
 void mainwindow::buyerFunc(const std::string& login)
 {
-    modeWindow->close();
     if (!buyerWindow) {
         buyerWindow = new class buyerWindow(login,this);
     }
     buyerWindow->show();
 }
 
-void mainwindow::sellerFunc()
+
+void mainwindow::sellerFunc(const std::string& login)
 {
-    modeWindow->close();
-    if (!enterWindow) {
-        enterWindow = new class enterWindow(this);
+    if (!sellerWindow) {
+        sellerWindow = new class sellerwindow(login,this);
     }
-    this->close();
-
-    std::string login = enterWindow->getLogin().toStdString();
-
-    sellerMode(login,"products.txt");
+    sellerWindow->show();
 }
 
 void mainwindow::modeChooseMenuShow(const std::string& login) {
@@ -70,7 +67,10 @@ void mainwindow::modeChooseMenuShow(const std::string& login) {
         {
             buyerFunc(login);
         });
-        connect(modeUI->sellerButton, &QPushButton::clicked, this, &mainwindow::sellerFunc);
+        connect(modeUI->sellerButton, &QPushButton::clicked, this, [this,login]()
+        {
+            sellerFunc(login);
+        });
     }
     modeWindow->show();
 }
@@ -130,7 +130,11 @@ void mainwindow::enterButtonClicked()  {
         });
         enterUI->login->setPixmap(login.scaled(enterUI->login->size(), Qt::KeepAspectRatio, Qt::SmoothTransformation));
         enterUI->neon->setPixmap(neon.scaled(enterUI->neon->size(), Qt::KeepAspectRatio, Qt::SmoothTransformation));
-        connect(enterUI->cancelButton, &QPushButton::clicked, this, &mainwindow::backToMainWindow);
+        connect(enterUI->cancelButton, &QPushButton::clicked, this, [this, log, enterUI]() {
+            enterUI->loginField->clear();
+            enterUI->passwordField->clear();
+            backToMainWindow();
+        });
         std::string loginText = enterWindow->getLogin().toStdString();
         connect(enterUI->applyButton, &QPushButton::clicked, this, [this, log, enterUI]() {
             bool loginSuccessful = false;
@@ -153,7 +157,12 @@ void mainwindow::enterButtonClicked()  {
             {
                 lightError(enterUI->passwordField, errorLine, enterUI->errorText2);
             }
-            if (loginSuccessful && passwordSuccessful) modeChooseMenuShow(enterUI->loginField->text().toStdString());
+            if (loginSuccessful && passwordSuccessful)
+            {
+                modeChooseMenuShow(enterUI->loginField->text().toStdString());
+                enterUI->loginField->clear();
+                enterUI->passwordField->clear();
+            }
         });
         enterWindow->setProperty("ui", QVariant::fromValue(static_cast<void*>(enterUI)));
     }
@@ -175,12 +184,21 @@ void mainwindow::regButtonClicked() {
         regUI->login->setPixmap(login.scaled(regUI->login->size(), Qt::KeepAspectRatio, Qt::SmoothTransformation));
         QPixmap password("C:/Users/ASUS/CLionProjects/untitled51/resources/padlockw.png");
         regUI->password->setPixmap(password.scaled(regUI->password->size(), Qt::KeepAspectRatio, Qt::SmoothTransformation));
-        connect(regUI->cancelButton, &QPushButton::clicked, this, &mainwindow::backToMainWindow);
-       // connect(regUI->applyButton, &QPushButton::clicked, this, &mainwindow::modeChooseMenuShow);
+        connect(regUI->cancelButton, &QPushButton::clicked, this, [regUI, this]() {
+            regUI->loginField->clear();
+            regUI->passwordField->clear();
+            backToMainWindow();
+        });
         regWindow->setProperty("ui", QVariant::fromValue(static_cast<void*>(regUI)));
-        connect(regUI->applyButton, &QPushButton::clicked, this, [this,regUI]() {
-            std::cout << regUI->loginField->text().toStdString() << "|";
-            modeChooseMenuShow(regUI->loginField->text().toStdString());
+        connect(regUI->applyButton, &QPushButton::clicked, this, [regUI, this]() {
+            std::string login = regUI->loginField->text().toStdString();
+            std::string password = regUI->passwordField->text().toStdString();
+            std::vector<int> userProducts;
+            Profile profile(login, password, 0.0f);
+            Profile::saveProfileToFile(profile,"ProfileData.txt");
+            regUI->loginField->clear();
+            regUI->passwordField->clear();
+            backToMainWindow();
         });
     }
     regWindow->show();

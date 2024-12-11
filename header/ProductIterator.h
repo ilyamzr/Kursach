@@ -15,11 +15,6 @@ public:
         return index < container.size();
     }
     Product next();
-    [[nodiscard]] Product getProduct() const
-    {
-        Product product = container.getProduct(index);
-        return product;
-    }
 
 private:
     const ProductContainer& container;

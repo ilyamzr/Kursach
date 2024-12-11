@@ -10,6 +10,18 @@
     <height>600</height>
    </rect>
   </property>
+  <property name="minimumSize">
+   <size>
+    <width>800</width>
+    <height>600</height>
+   </size>
+  </property>
+  <property name="maximumSize">
+   <size>
+    <width>800</width>
+    <height>600</height>
+   </size>
+  </property>
   <property name="windowTitle">
    <string>buyerWindow</string>
   </property>
@@ -1972,8 +1984,8 @@ QPushButton:hover {
    </property>
    <property name="geometry">
     <rect>
-     <x>710</x>
-     <y>450</y>
+     <x>700</x>
+     <y>50</y>
      <width>41</width>
      <height>41</height>
     </rect>
@@ -2013,8 +2025,8 @@ QPushButton:hover {
   <widget class="QPushButton" name="downloadButton">
    <property name="geometry">
     <rect>
-     <x>710</x>
-     <y>450</y>
+     <x>700</x>
+     <y>50</y>
      <width>41</width>
      <height>41</height>
     </rect>
