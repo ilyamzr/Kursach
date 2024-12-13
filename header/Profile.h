@@ -1,5 +1,4 @@
 #include <iostream>
-#include "Product.h"
 #include <vector>
 #include <QString>
 
@@ -7,14 +6,7 @@
 #define PROFILECLASS_H
 
 class Profile {
-    friend void buyProduct(const std::string_view& login, int ID);
-    friend Profile getProfileByLogin(const std::string& filename, const std::string_view& login);
-    friend void deleteProfile(const std::string& filename, const std::string_view& login);
-    friend void depositMoney(const std::string_view& login, const std::string& filename, float sum);
-    friend QString updateProfileInfo(const Profile& product);
-    friend bool checkLogin(const std::string& login);
-    friend void checkPassword(const std::string& password,const std::string& login);
-
+    friend QString updateProfileInfo(const Profile& profile);
 private:
     std::string login;
     float balance{};
@@ -30,16 +22,29 @@ public:
         password = newPassword;
     }
 
-    template <typename U>
-    static U updateBalance(U amount, float profileBalance) {
-        U balance = static_cast<float>(amount) + profileBalance;
+    void updateBalance(float newBalance) {
+        balance += newBalance;
+    }
+
+    [[nodiscard]] float getBalance() const{
         return balance;
+    }
+
+    std::string getLogin(){
+        return login;
     }
 
     virtual ~Profile() = default;
 
     static void saveProfileToFile(const Profile& profile, const std::string& filename);
     static Profile readProfileFromFile(std::string line);
+    void updateProfilesInfo(const std::vector<Profile>& profiles, const std::string& filename);
+    void deleteProfile(const std::string& filename, const std::string_view& login);
+    Profile getProfileByLogin(const std::string& filename, const std::string_view& login);
+    static bool checkLogin(const std::string& login);
+    static void checkPassword(const std::string& login, const std::string& password);
+    static bool checkRegLogin(const std::string& login);
+    static void checkRegPassword(const std::string& password);
 };
 
 #endif

@@ -33,12 +33,11 @@
     <string notr="true">QLabel{
     border: none;
     background: none;
-    color: rgb(100, 249, 189);
-    font-family: 'Yu Gothic UI Light', sans-serif;
+      font-family: 'Yu Gothic UI Light', sans-serif;
 }</string>
    </property>
    <property name="text">
-    <string>Введите свой логин и пароль</string>
+    <string>Введите логин и пароль</string>
    </property>
   </widget>
   <widget class="QLabel" name="background">
@@ -56,8 +55,7 @@
    <property name="styleSheet">
     <string notr="true">Qlabel {
     border: none;
-    background: none;
-    text-shadow: 0 0 5px rgba(0, 255, 0, 0); /* Initial transparent green glow */
+    background: none; */
 }</string>
    </property>
    <property name="frameShape">
@@ -100,8 +98,7 @@
    <property name="styleSheet">
     <string notr="true">Qlabel {
     border: none;
-    background: none;
-    text-shadow: 0 0 5px rgba(0, 255, 0, 0); /* Initial transparent green glow */
+    background: none; */
 }</string>
    </property>
    <property name="frameShape">
@@ -274,8 +271,7 @@ QPushButton:hover {
    <property name="styleSheet">
     <string notr="true">Qlabel {
     border: none;
-    background: none;
-    text-shadow: 0 0 5px rgba(0, 255, 0, 0); /* Initial transparent green glow */
+    background: none; */
 }</string>
    </property>
    <property name="frameShape">
@@ -319,7 +315,6 @@ QPushButton:hover {
     <string notr="true">Qlabel {
     border: none;
     background: none;
-    text-shadow: 0 0 5px rgba(0, 255, 0, 0); /* Initial transparent green glow */
 }</string>
    </property>
    <property name="frameShape">
@@ -347,6 +342,62 @@ QPushButton:hover {
     <bool>false</bool>
    </property>
   </widget>
+  <widget class="QLabel" name="errorText2">
+   <property name="geometry">
+    <rect>
+     <x>250</x>
+     <y>400</y>
+     <width>331</width>
+     <height>20</height>
+    </rect>
+   </property>
+   <property name="font">
+    <font>
+     <family>Yu Gothic UI Light</family>
+     <pointsize>12</pointsize>
+     <bold>false</bold>
+    </font>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">QLabel{
+    border: none;
+    background: none;
+    color: red;
+    font-family: 'Yu Gothic UI Light', sans-serif;
+}</string>
+   </property>
+   <property name="text">
+    <string/>
+   </property>
+  </widget>
+  <widget class="QLabel" name="errorText1">
+   <property name="geometry">
+    <rect>
+     <x>250</x>
+     <y>311</y>
+     <width>331</width>
+     <height>20</height>
+    </rect>
+   </property>
+   <property name="font">
+    <font>
+     <family>Yu Gothic UI Light</family>
+     <pointsize>12</pointsize>
+     <bold>false</bold>
+    </font>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">QLabel{
+    border: none;
+    background: none;
+    color: red;
+    font-family: 'Yu Gothic UI Light', sans-serif;
+}</string>
+   </property>
+   <property name="text">
+    <string/>
+   </property>
+  </widget>
   <zorder>background</zorder>
   <zorder>neon</zorder>
   <zorder>applyButton</zorder>
@@ -357,6 +408,8 @@ QPushButton:hover {
   <zorder>passwordField</zorder>
   <zorder>login</zorder>
   <zorder>password</zorder>
+  <zorder>errorText2</zorder>
+  <zorder>errorText1</zorder>
  </widget>
  <resources/>
  <connections/>

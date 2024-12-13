@@ -28,8 +28,7 @@
    <property name="styleSheet">
     <string notr="true">Qlabel {
     border: none;
-    background: none;
-    text-shadow: 0 0 5px rgba(0, 255, 0, 0); /* Initial transparent green glow */
+    background: none; /* Initial transparent green glow */
 }</string>
    </property>
    <property name="frameShape">
@@ -72,8 +71,7 @@
    <property name="styleSheet">
     <string notr="true">Qlabel {
     border: none;
-    background: none;
-    text-shadow: 0 0 5px rgba(0, 255, 0, 0); /* Initial transparent green glow */
+    background: none; /* Initial transparent green glow */
 }</string>
    </property>
    <property name="frameShape">
@@ -566,7 +564,6 @@ QPushButton:hover {
     background: none;
     color: rgb(100, 249, 189);
     font-family: 'Yu Gothic UI Light', sans-serif;
-    text-shadow: 0 0 5px rgba(0, 255, 0, 0); /* Initial transparent green glow */
 }</string>
    </property>
    <property name="text">
@@ -797,7 +794,6 @@ li.checked::marker { content: &quot;\2612&quot;; }
     <string notr="true">Qlabel {
     border: none;
     background: none;
-    text-shadow: 0 0 5px rgba(0, 255, 0, 0); /* Initial transparent green glow */
 }</string>
    </property>
    <property name="frameShape">
@@ -860,7 +856,6 @@ li.checked::marker { content: &quot;\2612&quot;; }
     <string notr="true">Qlabel {
     border: none;
     background: none;
-    text-shadow: 0 0 5px rgba(0, 255, 0, 0); /* Initial transparent green glow */
 }</string>
    </property>
    <property name="frameShape">

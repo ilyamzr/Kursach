@@ -1,6 +1,6 @@
 #include <iostream>
 #include "../header/Product.h"
-#include "../header/operationFuncs.h"
+#include "../header/Profile.h"
 
 #ifndef UNTITLED51_PROFILECONTROL_H
 #define UNTITLED51_PROFILECONTROL_H
@@ -14,12 +14,7 @@ public:
     }
 
     static void deleteProductFunc(const std::string& login) {
-        viewProducts(login, "products.txt", 1);
-        std::cout << "Выберите товар, который хотите удалить";
-        int deletedNum;
-        std::cin >> deletedNum;
-        int ID = getID(deletedNum, login, 1);
-        ::deleteProduct("products.txt", ID);
+
     }
 
     virtual ~ProfileControl() = default;

@@ -1,8 +1,6 @@
 #include <iostream>
 #include "../header/Profile.h"
 #include "../header/ProfileControl.h"
-#include "../header/profileFuncs.h"
-
 #ifndef UNTITLED51_ADMIN_H
 #define UNTITLED51_ADMIN_H
 
@@ -17,7 +15,8 @@ public:
         std::cin >> log;
         if (checkLogin(log))
         {
-            Profile profile = getProfileByLogin("ProductData.txt", log);
+            Profile profile;
+            profile.getProfileByLogin("ProductData.txt", log);
             std::string newPassword;
             std::cout << "Введите новый пароль:";
             std::cin >> newPassword;

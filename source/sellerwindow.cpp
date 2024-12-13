@@ -19,15 +19,6 @@ const std::array<std::array<std::string, 6>, 9> allCategories = {{
                                                                          {"Женщинам", "Одежда", "Обувь", "Аксессуары", "Косметика", "Парфюмерия"},
                                                                  }};
 
-int generateID()
-{
-    std::random_device rd;
-    std::mt19937 gen(rd());
-    std::uniform_int_distribution dis(1, 99999);
-    int id = dis(gen);
-    return id;
-}
-
 void sellerwindow::updateSubcategories(int index)
 {
     ui->subcategoryChoose->clear();
@@ -87,7 +78,7 @@ void sellerwindow::addProduct(const std::string& login) {
                 ui->subcategoryChoose->currentIndex(),
                 ui->priceField->text().toFloat(),
                 ui->descriptionField->toPlainText().toStdString(),
-                generateID(),
+                Product::generateID(),
                 login
         );
         Product::saveProductToFile(newProduct,"products.txt");
@@ -124,7 +115,7 @@ void sellerwindow::deleteProductMenu(const std::string& login) {
     ui->rightButton->setVisible(false);
     ui->productInfo->setVisible(false);
     deleteButtonsVisible(true);
-    std::vector<Product> products = getMyProducts(login);
+    std::vector<Product> products = Product::getMyProducts(login);
     ui->productInfo->setStyleSheet(
             "QTextEdit {"
             "  background: transparent;"
@@ -142,7 +133,7 @@ void sellerwindow::deleteProductMenu(const std::string& login) {
     connect(ui->deleteProductButton, &QPushButton::clicked, this, [this,products]() mutable {
         int id;
         std::istringstream(getLastWord(ui->productInfo->toPlainText().toStdString())) >> id;
-        deleteProduct("products.txt", id);
+        Product::deleteProduct(id);
         ui->productInfo->setVisible(false);
         deleteButtonsVisible(false);
         pullMessage("Продукт успешно удален");
@@ -174,7 +165,7 @@ void sellerwindow::myProductsMenu(const std::string& login)
     deleteButtonsVisible(false);
     ui->productInfo->setVisible(false);
 
-    std::vector<Product> products = getMyProducts(login);
+    std::vector<Product> products = Product::getMyProducts(login);
     ui->productInfo->setStyleSheet(
             "QTextEdit {"
             "  background: transparent;"

@@ -28,8 +28,7 @@
    <property name="styleSheet">
     <string notr="true">Qlabel {
     border: none;
-    background: none;
-    text-shadow: 0 0 5px rgba(0, 255, 0, 0); /* Initial transparent green glow */
+    background: none; /* Initial transparent green glow */
 }</string>
    </property>
    <property name="frameShape">
@@ -206,7 +205,6 @@ QPushButton:hover {
     <string notr="true">Qlabel {
     border: none;
     background: none;
-    text-shadow: 0 0 5px rgba(0, 255, 0, 0); /* Initial transparent green glow */
 }</string>
    </property>
    <property name="frameShape">
@@ -250,7 +248,6 @@ QPushButton:hover {
     <string notr="true">Qlabel {
     border: none;
     background: none;
-    text-shadow: 0 0 5px rgba(0, 255, 0, 0); /* Initial transparent green glow */
 }</string>
    </property>
    <property name="frameShape">

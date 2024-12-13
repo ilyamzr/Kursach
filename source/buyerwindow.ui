@@ -90,7 +90,6 @@
     background: none;
     color: rgb(100, 249, 189);
     font-family: 'Yu Gothic UI Light', sans-serif;
-    text-shadow: 0 0 5px rgba(0, 255, 0, 0); /* Initial transparent green glow */
 }</string>
    </property>
    <property name="text">
@@ -1550,7 +1549,6 @@ li.checked::marker { content: &quot;\2612&quot;; }
     <string notr="true">Qlabel {
     border: none;
     background: none;
-    text-shadow: 0 0 5px rgba(0, 255, 0, 0); /* Initial transparent green glow */
 }</string>
    </property>
    <property name="frameShape">
@@ -1594,7 +1592,6 @@ li.checked::marker { content: &quot;\2612&quot;; }
     <string notr="true">Qlabel {
     border: none;
     background: none;
-    text-shadow: 0 0 5px rgba(0, 255, 0, 0); /* Initial transparent green glow */
 }</string>
    </property>
    <property name="frameShape">
@@ -1695,10 +1692,10 @@ QPushButton:hover {
   <widget class="QPushButton" name="checkProducts">
    <property name="geometry">
     <rect>
-     <x>480</x>
-     <y>350</y>
-     <width>131</width>
-     <height>71</height>
+     <x>445</x>
+     <y>390</y>
+     <width>201</width>
+     <height>61</height>
     </rect>
    </property>
    <property name="font">
@@ -1721,8 +1718,8 @@ QPushButton:hover {
 }</string>
    </property>
    <property name="text">
-    <string>Посмотреть 
-продукты</string>
+    <string>Посмотреть историю
+покупок</string>
    </property>
   </widget>
   <widget class="QPushButton" name="depositMoneyButton">
@@ -1760,7 +1757,6 @@ QPushButton:hover {
     <string notr="true">Qlabel {
     border: none;
     background: none;
-    text-shadow: 0 0 5px rgba(0, 255, 0, 0); /* Initial transparent green glow */
 }</string>
    </property>
    <property name="frameShape">
@@ -1889,7 +1885,6 @@ QPushButton:hover {
     <string notr="true">Qlabel {
     border: none;
     background: none;
-    text-shadow: 0 0 5px rgba(0, 255, 0, 0); /* Initial transparent green glow */
 }</string>
    </property>
    <property name="frameShape">
@@ -1939,7 +1934,6 @@ QPushButton:hover {
     background: none;
     color: rgb(216, 216, 216);
     font-family: 'Yu Gothic UI Light', sans-serif;
-    text-shadow: 0 0 5px rgba(0, 255, 0, 0); /* Initial transparent green glow */
 }</string>
    </property>
    <property name="text">
@@ -1994,7 +1988,6 @@ QPushButton:hover {
     <string notr="true">Qlabel {
     border: none;
     background: none;
-    text-shadow: 0 0 5px rgba(0, 255, 0, 0); /* Initial transparent green glow */
 }</string>
    </property>
    <property name="frameShape">
@@ -2054,6 +2047,157 @@ QPushButton:hover {
     <string/>
    </property>
   </widget>
+  <widget class="QLabel" name="price">
+   <property name="geometry">
+    <rect>
+     <x>360</x>
+     <y>75</y>
+     <width>161</width>
+     <height>61</height>
+    </rect>
+   </property>
+   <property name="font">
+    <font>
+     <family>Yu Gothic UI Light</family>
+     <pointsize>23</pointsize>
+     <bold>false</bold>
+    </font>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">QLabel{
+    border: none;
+    background: none;
+    color: white;
+    font-family: 'Yu Gothic UI Light', sans-serif;
+}</string>
+   </property>
+   <property name="text">
+    <string>Сумма</string>
+   </property>
+  </widget>
+  <widget class="QLineEdit" name="priceField">
+   <property name="geometry">
+    <rect>
+     <x>460</x>
+     <y>90</y>
+     <width>291</width>
+     <height>41</height>
+    </rect>
+   </property>
+   <property name="font">
+    <font>
+     <family>Yu Gothic Light</family>
+     <pointsize>22</pointsize>
+    </font>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">QLineEdit {
+    background-color: rgba(83, 208, 158, 0.2); 
+    border: 2px solid #53D09E;
+    border-radius: 20px;
+    padding: 5px; /* Добавление отступа для текста */
+}
+</string>
+   </property>
+   <property name="text">
+    <string/>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="applyButton2">
+   <property name="geometry">
+    <rect>
+     <x>460</x>
+     <y>140</y>
+     <width>121</width>
+     <height>43</height>
+    </rect>
+   </property>
+   <property name="font">
+    <font>
+     <family>Yu Gothic UI Light</family>
+     <pointsize>-1</pointsize>
+    </font>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">QPushButton {
+    background-color: rgba(83, 208, 158, 0.2); 
+    border: 2px solid #53D09E;
+    border-radius: 20px;
+	font-family: 'Yu Gothic UI Light', sans-serif;
+    font-size: 20px;
+text-align: center;
+}
+QPushButton:hover {
+    color: rgba(83, 208, 158, 1)
+}</string>
+   </property>
+   <property name="text">
+    <string>Подтвердить</string>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="cancelButton">
+   <property name="geometry">
+    <rect>
+     <x>620</x>
+     <y>140</y>
+     <width>121</width>
+     <height>43</height>
+    </rect>
+   </property>
+   <property name="font">
+    <font>
+     <family>Yu Gothic UI Light</family>
+     <pointsize>-1</pointsize>
+    </font>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">QPushButton {
+    background-color: rgba(83, 208, 158, 0.2); 
+    border: 2px solid #53D09E;
+    border-radius: 20px;
+	font-family: 'Yu Gothic UI Light', sans-serif;
+    font-size: 20px;
+text-align: center;
+}
+QPushButton:hover {
+    color: rgba(83, 208, 158, 1)
+}</string>
+   </property>
+   <property name="text">
+    <string>Отмена</string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="messageText">
+   <property name="enabled">
+    <bool>true</bool>
+   </property>
+   <property name="geometry">
+    <rect>
+     <x>340</x>
+     <y>520</y>
+     <width>421</width>
+     <height>41</height>
+    </rect>
+   </property>
+   <property name="font">
+    <font>
+     <family>Yu Gothic UI Light</family>
+     <pointsize>20</pointsize>
+     <bold>false</bold>
+    </font>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">QLabel{
+    border: none;
+    background: none;
+    color: rgb(100, 249, 189);
+    font-family: 'Yu Gothic UI Light', sans-serif;
+}</string>
+   </property>
+   <property name="text">
+    <string/>
+   </property>
+  </widget>
   <zorder>background</zorder>
   <zorder>introText_2</zorder>
   <zorder>neon</zorder>
@@ -2075,7 +2219,6 @@ QPushButton:hover {
   <zorder>rightButton</zorder>
   <zorder>buyButton</zorder>
   <zorder>checkProducts</zorder>
-  <zorder>depositMoneyButton</zorder>
   <zorder>depositMoney</zorder>
   <zorder>searchField</zorder>
   <zorder>searchButton</zorder>
@@ -2085,6 +2228,12 @@ QPushButton:hover {
   <zorder>helpButton</zorder>
   <zorder>download</zorder>
   <zorder>downloadButton</zorder>
+  <zorder>price</zorder>
+  <zorder>priceField</zorder>
+  <zorder>applyButton2</zorder>
+  <zorder>cancelButton</zorder>
+  <zorder>depositMoneyButton</zorder>
+  <zorder>messageText</zorder>
  </widget>
  <resources/>
  <connections/>

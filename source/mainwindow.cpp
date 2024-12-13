@@ -5,8 +5,6 @@
 #include "ui_regWindow.h"
 #include "ui_enterWindow.h"
 #include <iostream>
-#include "../header/interfaceFuncs.h"
-#include "../header/profileFuncs.h"
 #include "ui_buyerWindow.h"
 #include <QTimer>
 #include "../header/Admin.h"
@@ -141,7 +139,7 @@ void mainwindow::enterButtonClicked()  {
             bool passwordSuccessful = false;
             try
             {
-                checkLogin(enterUI->loginField->text().toStdString());
+                Profile::checkLogin(enterUI->loginField->text().toStdString());
                 loginSuccessful = true;
             }
             catch (std::string& errorLine)
@@ -150,7 +148,7 @@ void mainwindow::enterButtonClicked()  {
             }
             try
             {
-                checkPassword(enterUI->loginField->text().toStdString(), enterUI->passwordField->text().toStdString());
+                Profile::checkPassword(enterUI->loginField->text().toStdString(), enterUI->passwordField->text().toStdString());
                 passwordSuccessful = true;
             }
             catch (std::string& errorLine)
@@ -191,14 +189,37 @@ void mainwindow::regButtonClicked() {
         });
         regWindow->setProperty("ui", QVariant::fromValue(static_cast<void*>(regUI)));
         connect(regUI->applyButton, &QPushButton::clicked, this, [regUI, this]() {
+            bool loginValid = false;
+            bool passwordValid = false;
             std::string login = regUI->loginField->text().toStdString();
             std::string password = regUI->passwordField->text().toStdString();
-            std::vector<int> userProducts;
-            Profile profile(login, password, 0.0f);
-            Profile::saveProfileToFile(profile,"ProfileData.txt");
-            regUI->loginField->clear();
-            regUI->passwordField->clear();
-            backToMainWindow();
+            try
+            {
+                Profile::checkRegLogin(login);
+                loginValid = true;
+            }
+            catch (std::string& errorLine)
+            {
+                lightError(regUI->loginField, errorLine, regUI->errorText1);
+            }
+            try
+            {
+                Profile::checkRegPassword(password);
+                passwordValid = true;
+            }
+            catch (std::string& errorLine)
+            {
+                lightError(regUI->passwordField, errorLine, regUI->errorText2);
+            }
+
+            if (loginValid && passwordValid)
+            {
+                Profile profile(login, password, 0.0f);
+                Profile::saveProfileToFile(profile, "ProfileData.txt");
+                regUI->loginField->clear();
+                regUI->passwordField->clear();
+                backToMainWindow();
+            }
         });
     }
     regWindow->show();

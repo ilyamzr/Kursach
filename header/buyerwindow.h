@@ -28,6 +28,8 @@ public:
     void showProfileInfo(const std::string& login);
     void productsCheck(const std::vector <Product>& product, int mode, const std::string& logimn);
     void searchMenu(const std::string& login);
+    void depositMoney(const std::string& login);
+    void pullMessage(const std::string& message);
     ~buyerWindow() override;
 private:
     Ui::buyerWindow *ui;

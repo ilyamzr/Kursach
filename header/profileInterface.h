@@ -1,6 +1,0 @@
-#ifndef UNTITLED43_PROFILEINTERFACE_H
-#define UNTITLED43_PROFILEINTERFACE_H
-
-void profileFunc(const std::string& login);
-
-#endif //UNTITLED43_PROFILEINTERFACE_H

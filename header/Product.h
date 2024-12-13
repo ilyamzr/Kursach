@@ -10,16 +10,9 @@
 #include <random>
 
 class Product {
-    friend void deleteProduct(const std::string& filename, int deleteNum);
-    friend int getID(int deletedNum, const std::string_view& login, int mode);
-    friend void buyProduct(const std::string_view& login, int ID);
-    friend void viewProducts(const std::string_view &login, const std::string &filename, int mode);
-    friend std::vector<Product> categoriesSort(const std::string& filename, int category, int subcategory, const std::string& login);
-    friend QString updateProductInfo(int index, const std::vector<Product>& products);
     friend std::vector<std::string> searchForMatches(const QString &input);
-    friend Product getProductByName(const std::string& filename, std::string name);
-    friend std::vector<Product> getProductsByName(const std::string& filename, std::vector<std::string> name);
     friend void createJsonOutput(const std::string& login, const std::vector<Product>& products);
+    friend QString updateProductInfo(int index, const std::vector<Product>& products);
 
 private:
     std::string name;
@@ -40,18 +33,31 @@ public:
     virtual ~Product() = default;
     static Product readFromFile(std::string line);
     static void saveProductToFile(const Product& product, const std::string &filename);
-    static void printProductInfo(Product& product);
     static int getID(Product const &product)
     {
         return product.id;
+    }
+    [[nodiscard]] float getPrice() const
+    {
+        return price;
     }
     static std::string getOwner(Product const &product)
     {
         return product.owner;
     }
-    static std::string getProductCategory(int category);
-    static std::string getProductSubCategory(int subcategory,int category);
-    virtual void printError();
+    static int getStatus(Product const &product){
+        return product.forSale;
+    }
+    static void buyProduct(const std::string_view& login, int ID);
+    static void deleteProduct(int ID);
+    static void updateProductsInfo(const std::vector<Product>& products);
+    static std::vector<Product> getMyProducts(const std::string& login);
+    static std::vector<Product> categoriesSort(int categoryCheck, int subcategoryCheck, const std::string& login);
+    static Product getProductByName(const std::string& name);
+    static std::vector<Product> getProductsByName(const std::string& filename, const std::vector<std::string>& names);
+    Product getProductByID(int name);
+    static std::vector<Product> getAllProducts();
+    static int generateID();
 };
 
 #endif

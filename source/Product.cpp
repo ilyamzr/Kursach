@@ -1,7 +1,7 @@
 #include "../header/operationFuncs.h"
+#include "../header/Profile.h"
 #include <iostream>
 #include <sstream>
-#include <array>
 
 using namespace std;
 
@@ -31,55 +31,162 @@ Product Product::readFromFile(std::string line) {
 
 void Product::saveProductToFile(const Product& product, const std::string &filename) {
     std::ofstream file(filename, std::ios::app);
+    cout << "AA";
     if (file.is_open()) {
         file << product.owner << "/" << product.name << "/" << product.category << "/" << product.subcategory << "/" << product.price << "/" << product.description << "/" << product.id << "/" << product.forSale << "/" << std::endl;
         file.close();
     }
 }
 
-const std::array<std::array<std::string, 6>, 9> allCategories = {{
-                                                                         {"Техника", "Смартфон", "Ноутбуки", "Телевизоры", "Бытовая техника", "Аудио и видео техника"},
-                                                                         {"Спорт и активный отдых", "Спортивная одежда", "Спортивная обувь", "Тренажеры и фитнес-оборудование", "Туристическое снаряжение", "Велосипеды и аксессуары"},
-                                                                         {"Мебель", "Мебель для гостиной", "Мебель для спальни", "Мебель для кухни", "Офисная мебель", "Детская мебель"},
-                                                                         {"Дом", "Декор", "Освещение", "Текстиль", "Хранение", "Уборка"},
-                                                                         {"Игрушки", "Конструкторы", "Мягкие игрушки", "Настольные игры", "Развивающие игрушки", "Электронные игрушки"},
-                                                                         {"Мужчинам", "Одежда", "Обувь", "Аксессуары", "Парфюмерия", "Спортивные товары"},
-                                                                         {"Женщинам", "Одежда", "Обувь", "Аксессуары", "Косметика", "Парфюмерия"},
-                                                                         {"Детям", "Одежда", "Обувь", "Игрушки", "Учебные материалы", "Спортивные товары"},{"Продукты", "Фрукты и овощи", "Молочные продукты", "Мясо и рыба", "Бакалея", "Напитки" }
-                                                                 }};
+vector<Product> Product::getMyProducts(const std::string& login){
+    ifstream file("products.txt");
 
-std::string Product::getProductCategory(int category)
-{
-    return allCategories[category-1][0];
-}
-
-std::string Product::getProductSubCategory(int subcategory,int category)
-{
-    return allCategories[category-1][subcategory];
-}
-
-void Product::printError()
-{
-    cout << "Guest mode" << endl;
-}
-
-void Product::printProductInfo(Product& product)
-{
-    if (product.name != ":guest:")
-    {
-        cout << "Наименование товара: " << product.name << endl;
-        cout <<  getProductCategory(product.category) << "/";
-        cout <<  getProductSubCategory(product.subcategory,product.category) << endl;
-        cout << "Цена: " << product.price << "$" << endl;
-        cout << "Описание товара: " << product.description << endl;
-        cout << "Артикул: " << product.id << endl;
+    string line;
+    vector<Product> products;
+    while (getline(file, line)) {
+        Product product = Product::readFromFile(line);
+        if (Product::getOwner(product) == login) {
+            products.push_back(product);
+        }
     }
-    else
-    {
-        product.printError();
+    file.close();
+    return products;
+}
+
+vector<Product> Product::getAllProducts(){
+    ifstream file("products.txt");
+    string line;
+    vector<Product> products;
+    while (getline(file, line)) {
+        Product product = Product::readFromFile(line);
+        products.push_back(product);
+    }
+    file.close();
+    return products;
+}
+
+vector<Product> Product::categoriesSort(int categoryCheck,  int subcategoryCheck, const std::string& login)
+{
+    vector<Product> newProducts;
+    vector<Product> products = getAllProducts();
+    for (const auto& product : products) {
+        if (product.category == categoryCheck && product.subcategory == subcategoryCheck && product.forSale != 0 && product.owner != login) {
+            newProducts.push_back(product);
+        }
+    }
+    return newProducts;
+}
+
+Product Product::getProductByName(const string& check) {
+    vector<Product> products = getAllProducts();
+    for (const auto& product : products) {
+        if (product.name == check) {
+            return product;
+        }
+    }
+    throw out_of_range("Товар с указанным идентификатором не найден.");
+}
+
+vector<Product> Product::getProductsByName(const string& filename, const vector<string>& names) {
+    ifstream file(filename);
+    string line;
+    vector<Product> products;
+    while (std::getline(file, line)) {
+        Product product = Product::readFromFile(line);
+        for (const auto & nameCheck : names)
+        {
+            if (product.name == nameCheck) {
+                products.push_back(getProductByName(nameCheck));
+            }
+        }
+    }
+    file.close();
+    return products;
+}
+
+Product Product::getProductByID(int check) {
+    vector<Product> products = getAllProducts();
+    for (const auto& product : products) {
+        if (product.id == check) {
+            return product;
+        }
+    }
+    throw out_of_range("Товар с указанным идентификатором не найден.");
+}
+
+void Product::updateProductsInfo(const vector<Product>& products)
+{
+    ofstream file("products.txt");
+    if (file.is_open()) {
+        for (const Product& product : products) {
+            Product::saveProductToFile(product,"products.txt");
+        }
+        file.close();
+    } else {
+        cout << "Не удалось открыть файл: " << "products.txt" << endl;
     }
 }
 
+void Product::deleteProduct(int ID) {
+    vector<Product> products = getAllProducts();
+    vector<Product> newProducts;
+    for (const auto& product : products) {
+        if (product.id != ID && !product.name.empty()) {
+            newProducts.push_back(product);
+        }
+    }
+    updateProductsInfo(newProducts);
+}
 
+void Product::buyProduct(const string_view& login, int ID)
+{
+    string productFilename = "products.txt";
+    string profileFilename = "profileData.txt";
+    Product product;
+    product = product.getProductByID(ID);
+    Profile profile;
+    profile = profile.getProfileByLogin(profileFilename, login);
+    Profile sellerProfile;
+    sellerProfile = sellerProfile.getProfileByLogin(profileFilename, product.owner);
+    sellerProfile.updateBalance(product.price);
+    product.owner = login;
+    product.forSale = 0;
+    deleteProduct(product.id);
+    Product::saveProductToFile(product, productFilename);
+    profile.updateBalance(-product.price);
+    profile.deleteProfile(profileFilename, login);
+    profile.deleteProfile(profileFilename, sellerProfile.getLogin());
+    Profile::saveProfileToFile(profile, profileFilename);
+    Profile::saveProfileToFile(sellerProfile, profileFilename);
+}
 
+int Product::generateID()
+{
+    std::random_device rd;
+    std::mt19937 gen(rd());
+    std::uniform_int_distribution dis(1, 99999);
+    std::vector<Product> products = getAllProducts();
 
+    std::vector<int> existingIDs;
+    for (const auto& product : products) {
+        existingIDs.push_back(product.id);
+    }
+
+    int ID;
+    bool unique;
+    do {
+        unique = true;
+        ID = dis(gen);
+
+        for (const int existingID : existingIDs) {
+            if (existingID == ID) {
+                unique = false;
+                break;
+            }
+        }
+    } while (!unique);
+
+    return ID;
+}
+
+Product::Product() = default;
