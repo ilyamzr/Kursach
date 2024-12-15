@@ -48,15 +48,24 @@ public:
     static int getStatus(Product const &product){
         return product.forSale;
     }
-    static void buyProduct(const std::string_view& login, int ID);
+    static Product changeStatus(Product &product){
+        if (product.forSale == 0) product.forSale = 1;
+        else if(product.forSale == 1) product.forSale = 0;
+        return product;
+    }
+    static Product changeOwner(Product& product,const std::string& login){
+        product.owner = login;
+        return product;
+    }
+    static void addProductToCart(const std::string& login, int ID);
     static void deleteProduct(int ID);
     static void updateProductsInfo(const std::vector<Product>& products);
     static std::vector<Product> getMyProducts(const std::string& login);
     static std::vector<Product> categoriesSort(int categoryCheck, int subcategoryCheck, const std::string& login);
     static Product getProductByName(const std::string& name);
     static std::vector<Product> getProductsByName(const std::string& filename, const std::vector<std::string>& names);
-    Product getProductByID(int name);
-    static std::vector<Product> getAllProducts();
+    static Product getProductByID(int name);
+    static std::vector<Product> getAllProducts(int mode);
     static int generateID();
 };
 

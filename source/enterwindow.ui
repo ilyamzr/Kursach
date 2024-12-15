@@ -111,7 +111,7 @@
    <property name="font">
     <font>
      <family>Yu Gothic Light</family>
-     <pointsize>20</pointsize>
+     <pointsize>14</pointsize>
     </font>
    </property>
    <property name="styleSheet">
@@ -459,6 +459,230 @@ QPushButton:hover {
     color: red;
     font-family: 'Yu Gothic UI Light', sans-serif;
 }</string>
+   </property>
+   <property name="text">
+    <string/>
+   </property>
+  </widget>
+  <widget class="QLineEdit" name="loginToChange">
+   <property name="geometry">
+    <rect>
+     <x>40</x>
+     <y>120</y>
+     <width>341</width>
+     <height>61</height>
+    </rect>
+   </property>
+   <property name="font">
+    <font>
+     <family>Yu Gothic Light</family>
+     <pointsize>20</pointsize>
+    </font>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">QLineEdit {
+    background-color: rgba(83, 208, 158, 0.2); 
+    border: 2px solid #53D09E;
+    border-radius: 20px;
+    padding: 5px; /* Добавление отступа для текста */
+}
+</string>
+   </property>
+   <property name="text">
+    <string/>
+   </property>
+  </widget>
+  <widget class="QLabel" name="introText_3">
+   <property name="geometry">
+    <rect>
+     <x>40</x>
+     <y>-20</y>
+     <width>511</width>
+     <height>151</height>
+    </rect>
+   </property>
+   <property name="font">
+    <font>
+     <family>Yu Gothic UI Light</family>
+     <pointsize>27</pointsize>
+     <bold>false</bold>
+    </font>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">QLabel{
+    border: none;
+    background: none;
+    color: white;
+    font-family: 'Yu Gothic UI Light', sans-serif;
+}</string>
+   </property>
+   <property name="text">
+    <string>Введите логин</string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="introText_4">
+   <property name="geometry">
+    <rect>
+     <x>40</x>
+     <y>140</y>
+     <width>511</width>
+     <height>151</height>
+    </rect>
+   </property>
+   <property name="font">
+    <font>
+     <family>Yu Gothic UI Light</family>
+     <pointsize>27</pointsize>
+     <bold>false</bold>
+    </font>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">QLabel{
+    border: none;
+    background: none;
+    color: white;
+    font-family: 'Yu Gothic UI Light', sans-serif;
+}</string>
+   </property>
+   <property name="text">
+    <string>Введите новый пароль</string>
+   </property>
+  </widget>
+  <widget class="QLineEdit" name="newPassword">
+   <property name="geometry">
+    <rect>
+     <x>40</x>
+     <y>280</y>
+     <width>341</width>
+     <height>61</height>
+    </rect>
+   </property>
+   <property name="font">
+    <font>
+     <family>Yu Gothic Light</family>
+     <pointsize>20</pointsize>
+    </font>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">QLineEdit {
+    background-color: rgba(83, 208, 158, 0.2); 
+    border: 2px solid #53D09E;
+    border-radius: 20px;
+    padding: 5px; /* Добавление отступа для текста */
+}
+</string>
+   </property>
+   <property name="text">
+    <string/>
+   </property>
+  </widget>
+  <widget class="QLabel" name="introText_5">
+   <property name="geometry">
+    <rect>
+     <x>420</x>
+     <y>-20</y>
+     <width>511</width>
+     <height>151</height>
+    </rect>
+   </property>
+   <property name="font">
+    <font>
+     <family>Yu Gothic UI Light</family>
+     <pointsize>27</pointsize>
+     <bold>false</bold>
+    </font>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">QLabel{
+    border: none;
+    background: none;
+    color: white;
+    font-family: 'Yu Gothic UI Light', sans-serif;
+}</string>
+   </property>
+   <property name="text">
+    <string>Введите ID</string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="introText_6">
+   <property name="geometry">
+    <rect>
+     <x>420</x>
+     <y>140</y>
+     <width>511</width>
+     <height>151</height>
+    </rect>
+   </property>
+   <property name="font">
+    <font>
+     <family>Yu Gothic UI Light</family>
+     <pointsize>27</pointsize>
+     <bold>false</bold>
+    </font>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">QLabel{
+    border: none;
+    background: none;
+    color: white;
+    font-family: 'Yu Gothic UI Light', sans-serif;
+}</string>
+   </property>
+   <property name="text">
+    <string>Введите новый ID</string>
+   </property>
+  </widget>
+  <widget class="QLineEdit" name="ID">
+   <property name="geometry">
+    <rect>
+     <x>420</x>
+     <y>120</y>
+     <width>341</width>
+     <height>61</height>
+    </rect>
+   </property>
+   <property name="font">
+    <font>
+     <family>Yu Gothic Light</family>
+     <pointsize>20</pointsize>
+    </font>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">QLineEdit {
+    background-color: rgba(83, 208, 158, 0.2); 
+    border: 2px solid #53D09E;
+    border-radius: 20px;
+    padding: 5px; /* Добавление отступа для текста */
+}
+</string>
+   </property>
+   <property name="text">
+    <string/>
+   </property>
+  </widget>
+  <widget class="QLineEdit" name="newID">
+   <property name="geometry">
+    <rect>
+     <x>420</x>
+     <y>280</y>
+     <width>341</width>
+     <height>61</height>
+    </rect>
+   </property>
+   <property name="font">
+    <font>
+     <family>Yu Gothic Light</family>
+     <pointsize>20</pointsize>
+    </font>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">QLineEdit {
+    background-color: rgba(83, 208, 158, 0.2); 
+    border: 2px solid #53D09E;
+    border-radius: 20px;
+    padding: 5px; /* Добавление отступа для текста */
+}
+</string>
    </property>
    <property name="text">
     <string/>

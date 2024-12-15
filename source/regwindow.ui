@@ -243,7 +243,7 @@ QPushButton:hover {
    <property name="font">
     <font>
      <family>Yu Gothic Light</family>
-     <pointsize>20</pointsize>
+     <pointsize>14</pointsize>
     </font>
    </property>
    <property name="styleSheet">

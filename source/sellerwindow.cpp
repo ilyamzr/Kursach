@@ -69,6 +69,8 @@ void sellerwindow::addProduct(const std::string& login) {
     for (int i = 0; i < 8; i++) {
         ui->categoryChoose->addItem(QString::fromStdString(allCategories[i][0]));
     }
+    disconnect(ui->applyButton, &QPushButton::clicked, this, nullptr);
+    disconnect(ui->applyButton, &QPushButton::clicked, this, nullptr);
     updateSubcategories(ui->categoryChoose->currentIndex());
     connect(ui->categoryChoose, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &sellerwindow::updateSubcategories);
     connect(ui->applyButton, &QPushButton::clicked, this, [this,login]() {
@@ -114,49 +116,53 @@ void sellerwindow::deleteProductMenu(const std::string& login) {
     ui->right->setVisible(false);
     ui->rightButton->setVisible(false);
     ui->productInfo->setVisible(false);
-    deleteButtonsVisible(true);
     std::vector<Product> products = Product::getMyProducts(login);
-    ui->productInfo->setStyleSheet(
-            "QTextEdit {"
-            "  background: transparent;"
-            "  color: white;"
-            "  font-family: 'Yu Gothic UI Light', sans-serif;"
-            "  font-size: 20px;"
-            "}"
-    );
-    int i = 0;
-    QString info = updateProductInfo(i, products);
-    ui->productInfo->setPlainText(info);
-    ui->productInfo->setVisible(true);
-    std::cout << "B ";
+    if (!products.empty())
+    {
+        deleteButtonsVisible(true);
+        ui->productInfo->setStyleSheet(
+                "QTextEdit {"
+                "  background: transparent;"
+                "  color: white;"
+                "  font-family: 'Yu Gothic UI Light', sans-serif;"
+                "  font-size: 20px;"
+                "}"
+        );
+        int i = 0;
+        QString info = updateProductInfo(i, products);
+        ui->productInfo->setPlainText(info);
+        ui->productInfo->setVisible(true);
+        disconnect(ui->deleteProductButton, &QPushButton::clicked, this, nullptr);
 
-    connect(ui->deleteProductButton, &QPushButton::clicked, this, [this,products]() mutable {
-        int id;
-        std::istringstream(getLastWord(ui->productInfo->toPlainText().toStdString())) >> id;
-        Product::deleteProduct(id);
-        ui->productInfo->setVisible(false);
-        deleteButtonsVisible(false);
-        pullMessage("Продукт успешно удален");
-    });
-    auto index= std::make_shared<int>(i);
+        connect(ui->deleteProductButton, &QPushButton::clicked, this, [this,products]() mutable {
+            int id;
+            std::istringstream(getLastWord(ui->productInfo->toPlainText().toStdString())) >> id;
+            Product::deleteProduct(id);
+            ui->productInfo->setVisible(false);
+            deleteButtonsVisible(false);
+            pullMessage("Продукт успешно удален");
+        });
+        auto index= std::make_shared<int>(i);
 
-    connect(ui->rightButton, &QPushButton::clicked, this, [this, index, products]() mutable {
-        if (++(*index) > products.size() - 1) {
-            *index = 0;
-        }
-        QString inf;
-        inf = updateProductInfo(*index, products);
-        ui->productInfo->setPlainText(inf);
-    });
+        connect(ui->rightButton, &QPushButton::clicked, this, [this, index, products]() mutable {
+            if (++(*index) > products.size() - 1) {
+                *index = 0;
+            }
+            QString inf;
+            inf = updateProductInfo(*index, products);
+            ui->productInfo->setPlainText(inf);
+        });
 
-    connect(ui->leftButton, &QPushButton::clicked, this, [this, index, products]() mutable {
-        if (--(*index) < 0) {
-            *index = static_cast<int>(products.size()) - 1;
-        }
-        QString inf;
-        inf = updateProductInfo(*index, products);
-        ui->productInfo->setPlainText(inf);
-    });
+        connect(ui->leftButton, &QPushButton::clicked, this, [this, index, products]() mutable {
+            if (--(*index) < 0) {
+                *index = static_cast<int>(products.size()) - 1;
+            }
+            QString inf;
+            inf = updateProductInfo(*index, products);
+            ui->productInfo->setPlainText(inf);
+        });
+    }
+    else pullMessage("Товаров нет");
 }
 
 void sellerwindow::myProductsMenu(const std::string& login)
@@ -166,26 +172,30 @@ void sellerwindow::myProductsMenu(const std::string& login)
     ui->productInfo->setVisible(false);
 
     std::vector<Product> products = Product::getMyProducts(login);
-    ui->productInfo->setStyleSheet(
-            "QTextEdit {"
-            "  background: transparent;"
-            "  color: white;"
-            "  font-family: 'Yu Gothic UI Light', sans-serif;"
-            "  font-size: 20px;"
-            "}"
-    );
-    int i = 0;
-    QString info = updateProductInfo(i, products);
-    ui->productInfo->setPlainText(info);
-    ui->productInfo->setVisible(true);
-    if (products.size() > 1)
+    if (products.size() != 0)
     {
-        ui->left->setVisible(true);
-        ui->leftButton->setVisible(true);
-        ui->right->setVisible(true);
-        ui->rightButton->setVisible(true);
+        ui->productInfo->setStyleSheet(
+                "QTextEdit {"
+                "  background: transparent;"
+                "  color: white;"
+                "  font-family: 'Yu Gothic UI Light', sans-serif;"
+                "  font-size: 20px;"
+                "}"
+        );
+        int i = 0;
+        QString info = updateProductInfo(i, products);
+        ui->productInfo->setPlainText(info);
         ui->productInfo->setVisible(true);
+        if (products.size() > 1)
+        {
+            ui->left->setVisible(true);
+            ui->leftButton->setVisible(true);
+            ui->right->setVisible(true);
+            ui->rightButton->setVisible(true);
+            ui->productInfo->setVisible(true);
+        }
     }
+    else pullMessage("Товаров нет");
 }
 
 sellerwindow::sellerwindow(const std::string& login, QWidget *parent) :
@@ -199,6 +209,7 @@ sellerwindow::sellerwindow(const std::string& login, QWidget *parent) :
     ui->rightButton->setVisible(false);
     ui->productInfo->setVisible(false);
     ui->deleteProductButton->setVisible(false);
+    ui->productInfo->setReadOnly(true);
 
     QPixmap bg("C:/Users/ASUS/CLionProjects/untitled51/resources/bg1.png");
     ui->background->setPixmap(bg.scaled(ui->background->size(), Qt::KeepAspectRatio, Qt::SmoothTransformation));

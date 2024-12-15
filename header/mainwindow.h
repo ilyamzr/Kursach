@@ -25,6 +25,7 @@ private slots:
     void regButtonClicked();
     void buyerFunc(const std::string& login);
     void sellerFunc(const std::string& login);
+    void adminFunc();
     void lightError(QLineEdit* loginField, const std::string& errorLine, QLabel *errorField);
 
 public slots:

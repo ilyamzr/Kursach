@@ -1,5 +1,6 @@
 #include "../header/operationFuncs.h"
 #include "../header/Profile.h"
+#include "../header/Cart.h"
 #include <iostream>
 #include <sstream>
 
@@ -31,7 +32,6 @@ Product Product::readFromFile(std::string line) {
 
 void Product::saveProductToFile(const Product& product, const std::string &filename) {
     std::ofstream file(filename, std::ios::app);
-    cout << "AA";
     if (file.is_open()) {
         file << product.owner << "/" << product.name << "/" << product.category << "/" << product.subcategory << "/" << product.price << "/" << product.description << "/" << product.id << "/" << product.forSale << "/" << std::endl;
         file.close();
@@ -53,13 +53,13 @@ vector<Product> Product::getMyProducts(const std::string& login){
     return products;
 }
 
-vector<Product> Product::getAllProducts(){
+vector<Product> Product::getAllProducts(int mode){
     ifstream file("products.txt");
     string line;
     vector<Product> products;
     while (getline(file, line)) {
         Product product = Product::readFromFile(line);
-        products.push_back(product);
+        if ((Product::getStatus(product) != 0 && mode == 1) || mode == 0) products.push_back(product);
     }
     file.close();
     return products;
@@ -68,7 +68,7 @@ vector<Product> Product::getAllProducts(){
 vector<Product> Product::categoriesSort(int categoryCheck,  int subcategoryCheck, const std::string& login)
 {
     vector<Product> newProducts;
-    vector<Product> products = getAllProducts();
+    vector<Product> products = getAllProducts(1);
     for (const auto& product : products) {
         if (product.category == categoryCheck && product.subcategory == subcategoryCheck && product.forSale != 0 && product.owner != login) {
             newProducts.push_back(product);
@@ -78,7 +78,7 @@ vector<Product> Product::categoriesSort(int categoryCheck,  int subcategoryCheck
 }
 
 Product Product::getProductByName(const string& check) {
-    vector<Product> products = getAllProducts();
+    vector<Product> products = getAllProducts(1);
     for (const auto& product : products) {
         if (product.name == check) {
             return product;
@@ -105,7 +105,7 @@ vector<Product> Product::getProductsByName(const string& filename, const vector<
 }
 
 Product Product::getProductByID(int check) {
-    vector<Product> products = getAllProducts();
+    vector<Product> products = getAllProducts(0);
     for (const auto& product : products) {
         if (product.id == check) {
             return product;
@@ -128,7 +128,7 @@ void Product::updateProductsInfo(const vector<Product>& products)
 }
 
 void Product::deleteProduct(int ID) {
-    vector<Product> products = getAllProducts();
+    vector<Product> products = getAllProducts(0);
     vector<Product> newProducts;
     for (const auto& product : products) {
         if (product.id != ID && !product.name.empty()) {
@@ -138,26 +138,18 @@ void Product::deleteProduct(int ID) {
     updateProductsInfo(newProducts);
 }
 
-void Product::buyProduct(const string_view& login, int ID)
+void Product::addProductToCart(const string& login, int ID)
 {
-    string productFilename = "products.txt";
-    string profileFilename = "profileData.txt";
-    Product product;
-    product = product.getProductByID(ID);
-    Profile profile;
-    profile = profile.getProfileByLogin(profileFilename, login);
-    Profile sellerProfile;
-    sellerProfile = sellerProfile.getProfileByLogin(profileFilename, product.owner);
-    sellerProfile.updateBalance(product.price);
-    product.owner = login;
+    Product product = Product::getProductByID(ID);
     product.forSale = 0;
-    deleteProduct(product.id);
-    Product::saveProductToFile(product, productFilename);
-    profile.updateBalance(-product.price);
-    profile.deleteProfile(profileFilename, login);
-    profile.deleteProfile(profileFilename, sellerProfile.getLogin());
-    Profile::saveProfileToFile(profile, profileFilename);
-    Profile::saveProfileToFile(sellerProfile, profileFilename);
+    deleteProduct(ID);
+    saveProductToFile(product,"products.txt");
+    Cart cart(login);
+    if(Cart::getCart(login).getNum() != 0) {
+        cart = Cart::getCart(login);
+    }
+    cart = Cart::addProduct(cart,ID);
+    Cart::saveCartToFile(cart,"carts.txt");
 }
 
 int Product::generateID()
@@ -165,7 +157,7 @@ int Product::generateID()
     std::random_device rd;
     std::mt19937 gen(rd());
     std::uniform_int_distribution dis(1, 99999);
-    std::vector<Product> products = getAllProducts();
+    std::vector<Product> products = getAllProducts(1);
 
     std::vector<int> existingIDs;
     for (const auto& product : products) {

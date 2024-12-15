@@ -22,9 +22,7 @@ mainwindow::mainwindow(QWidget *parent) :
     ui->background->setPixmap(bg.scaled(ui->background->size(), Qt::KeepAspectRatio, Qt::SmoothTransformation));
     connect(ui->enterButton, &QPushButton::clicked, this, &mainwindow::enterButtonClicked);
     connect(ui->regButton, &QPushButton::clicked, this, &mainwindow::regButtonClicked);
-    connect(ui->guestButton, &QPushButton::clicked, this, [this]() {
-        modeChooseMenuShow(":guest:");
-    });}
+}
 
 mainwindow::~mainwindow() {
     delete ui;
@@ -107,6 +105,11 @@ void mainwindow::lightError(QLineEdit* loginField, const std::string& errorLine,
     });
 }
 
+void mainwindow::adminFunc()
+{
+
+}
+
 void mainwindow::enterButtonClicked()  {
     ui->menuContainer->hide();
     std::string log;
@@ -116,6 +119,15 @@ void mainwindow::enterButtonClicked()  {
         enterUI->setupUi(enterWindow);
         enterUI->errorText1->setVisible(false);
         enterUI->errorText2->setVisible(false);
+        enterUI->loginToChange->setVisible(false);
+        enterUI->newPassword->setVisible(false);
+        enterUI->ID->setVisible(false);
+        enterUI->newID->setVisible(false);
+        enterUI->introText_3->setVisible(false);
+        enterUI->introText_4->setVisible(false);
+        enterUI->introText_5->setVisible(false);
+        enterUI->introText_6->setVisible(false);
+        enterUI->passwordField->setEchoMode(QLineEdit::Password); // Устанавливаем режим отображения точек
         QPixmap bg("C:/Users/ASUS/CLionProjects/untitled51/resources/bg1.png");
         enterUI->background->setPixmap(bg.scaled(ui->background->size(), Qt::KeepAspectRatio, Qt::SmoothTransformation));
         QPixmap neon("C:/Users/ASUS/CLionProjects/untitled51/resources/neon.png");
@@ -132,6 +144,12 @@ void mainwindow::enterButtonClicked()  {
             enterUI->loginField->clear();
             enterUI->passwordField->clear();
             backToMainWindow();
+        });
+        connect(enterUI->adminButton, &QPushButton::clicked, this, [this, log, enterUI]() {
+            if (enterUI->loginField->text().toStdString() == "Admin" && enterUI->passwordField->text().toStdString() == "ADMINPASS")
+            {
+                adminFunc();
+            }
         });
         std::string loginText = enterWindow->getLogin().toStdString();
         connect(enterUI->applyButton, &QPushButton::clicked, this, [this, log, enterUI]() {
@@ -174,6 +192,7 @@ void mainwindow::regButtonClicked() {
         regWindow = new class regWindow(this);
         auto *regUI = new Ui::regWindow;
         regUI->setupUi(regWindow);
+        regUI->passwordField->setEchoMode(QLineEdit::Password);
         QPixmap bg("C:/Users/ASUS/CLionProjects/untitled51/resources/bg1.png");
         regUI->background->setPixmap(bg.scaled(ui->background->size(), Qt::KeepAspectRatio, Qt::SmoothTransformation));
         QPixmap neon("C:/Users/ASUS/CLionProjects/untitled51/resources/neon.png");

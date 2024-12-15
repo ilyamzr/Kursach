@@ -43,9 +43,6 @@ public:
         }
     }
 
-    void printError() override {
-        std::cerr << "Логин не найден" << std::endl;
-    }
 };
 
 #endif //UNTITLED51_ADMIN_H

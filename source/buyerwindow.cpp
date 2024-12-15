@@ -1,6 +1,7 @@
 #include "ui_modeChooseWindow.h"
 #include "../header/operationFuncs.h"
 #include "../header/mainwindow.h"
+#include "../header/Cart.h"
 #include "../header/Profile.h"
 #include <QPropertyAnimation>
 #include "ui_buyerWindow.h"
@@ -49,7 +50,7 @@ QString updateProductInfo(int index, const vector<Product>& products) {
 }
 
 vector<string> searchForMatches(const QString &input) {
-    std::vector<Product> products = Product::getAllProducts();
+    std::vector<Product> products = Product::getAllProducts(1);
     vector<string> newProducts;
     for (const auto& product : products) {
         QString productName = QString::fromStdString(product.name);
@@ -101,6 +102,11 @@ void buyerWindow::searchMenu(const string& login){
     ui->applyButton2->setVisible(false);
     ui->cancelButton->setVisible(false);
     ui->searchField->clear();
+    ui->cart->setVisible(false);
+    ui->cartButton->setVisible(false);
+    ui->buy->setVisible(false);
+    ui->remove->setVisible(false);
+    ui->shopNums->setVisible(false);
 
     disconnect(ui->searchField, &QLineEdit::textChanged, this, nullptr);
     disconnect(ui->helpButton, &QPushButton::clicked, this, nullptr);
@@ -190,6 +196,11 @@ void buyerWindow::productsCheck(const vector<Product>& products, int mode, const
         ui->priceField->setVisible(false);
         ui->applyButton2->setVisible(false);
         ui->cancelButton->setVisible(false);
+        ui->cart->setVisible(false);
+        ui->cartButton->setVisible(false);
+        if(mode != 2)ui->buy->setVisible(false);
+        if(mode != 2)ui->remove->setVisible(false);
+        if(mode != 2)ui->shopNums->setVisible(false);
 
         int i = 0;
         QString info;
@@ -206,24 +217,13 @@ void buyerWindow::productsCheck(const vector<Product>& products, int mode, const
                 if (++(*index) > products.size() - 1) {
                     *index = 0;
                 }
-                std::cout << "E ";
                 QString inf;
                 inf = updateProductInfo(*index, products);
                 ui->productInfo->setPlainText(inf);
                 connect(ui->buyButton, &QPushButton::clicked, this, [this, index, login, products]() mutable {
                     int id = __gnu_cxx::__alloc_traits<std::allocator<Product>>::value_type::getID(products[*index]);
-                    Profile profile;
-                    profile = profile.getProfileByLogin("ProfileData.txt",login);
-                    Product product;
-                    product = product.getProductByID(id);
-                    if (product.getPrice() >= profile.getBalance())
-                    {
-                        Product::buyProduct(login, id);
-                    }
-                    else
-                    {
-                        pullMessage("Недостаточно денег на балансе");
-                    }
+                    Product::addProductToCart(login, id);
+                    pullMessage("Продукт добавлен в корзину");
                 });
             });
 
@@ -235,13 +235,15 @@ void buyerWindow::productsCheck(const vector<Product>& products, int mode, const
                 QString inf;
                 inf = updateProductInfo(*index, products);
                 ui->productInfo->setPlainText(inf);
-                connect(ui->buyButton, &QPushButton::clicked, this, [index, login, products]() mutable {
+                connect(ui->buyButton, &QPushButton::clicked, this, [this,index, login, products]() mutable {
                     int id = __gnu_cxx::__alloc_traits<std::allocator<Product>>::value_type::getID(products[*index]);
-                    Product::buyProduct(login, id);
+                    Product::addProductToCart(login, id);
+                    pullMessage("Продукт добавлен в корзину");
                 });
             });
         }
     }
+    else pullMessage("Товаров нет");
 }
 
 void buyerWindow::depositMoney(const string& login)
@@ -254,6 +256,15 @@ void buyerWindow::depositMoney(const string& login)
     ui->applyButton2->setVisible(true);
     ui->cancelButton->setVisible(true);
     ui->productInfo->setVisible(false);
+    ui->cart->setVisible(false);
+    ui->cartButton->setVisible(false);
+    ui->buy->setVisible(false);
+    ui->remove->setVisible(false);
+    ui->shopNums->setVisible(false);
+
+    auto *validator = new QDoubleValidator(ui->priceField);
+    validator->setNotation(QDoubleValidator::StandardNotation);
+    validator->setDecimals(2);
 
     connect(ui->applyButton2, &QPushButton::clicked, this, [this,login]() mutable {
         Profile profile;
@@ -276,8 +287,68 @@ void buyerWindow::depositMoney(const string& login)
         ui->priceField->setVisible(false);
         ui->applyButton2->setVisible(false);
         ui->cancelButton->setVisible(false);
+        ui->productInfo->setVisible(true);
     });
 }
+
+std::string LastWord(const std::string& text) {
+    size_t lastSpace = text.find_last_of(' ');
+    if (lastSpace == std::string::npos) {
+        return text;
+    }
+    return text.substr(lastSpace + 1);
+}
+
+void buyerWindow::cartShow(const std::string& login)
+{
+    Cart cart(login);
+    cart = cart.getCart(login);
+    if (cart.getNum() == 0)
+    {
+        pullMessage("Корзина пуста");
+        return;
+    }
+    ui->checkProducts->setVisible(false);
+    ui->depositMoney->setVisible(false);
+    ui->depositMoneyButton->setVisible(false);
+    ui->productInfo->setVisible(true);
+    ui->cart->setVisible(false);
+    ui->cartButton->setVisible(false);
+    ui->buyButton->setVisible(false);
+    ui->buy->setVisible(true);
+    ui->remove->setVisible(true);
+    ui->shopNums->setVisible(true);
+    vector<Product> products;
+    products.resize(cart.getNum());
+    for (int i = 0; i < cart.getNum();i++)
+    {
+        int id = cart.getProduct(i);
+        products[i] = Product::getProductByID(id);
+    }
+    ui->shopNums->setPlaceholderText("Введите адрес");
+    productsCheck(products,2,login);
+    disconnect(ui->buy, &QPushButton::clicked, this, nullptr);
+    float sum = cart.totalCost(cart);
+    QString text = "Заказать корзину";
+    ui->buy->setText(text + "\n" + QString::number(sum, 'f', 2) + "$");
+    connect(ui->buy, &QPushButton::clicked, this, [this,login,cart]() mutable {
+        if (!ui->shopNums->text().isEmpty())
+        {
+            if (!Cart::buyCart(cart,login))
+            {
+                pullMessage("Недостаточно средств");
+            }
+            else pullMessage("Покупка совершена");
+        }
+        else pullMessage("Введите адрес");
+    });
+    connect(ui->remove, &QPushButton::clicked, this, [this,login]() mutable {
+        std::string text = ui->productInfo->toPlainText().toStdString();
+        int id;
+        std::istringstream(LastWord(ui->productInfo->toPlainText().toStdString())) >> id;
+        Cart::removeProduct(id,login);
+        pullMessage("Корзина очищена");
+    });}
 
 void buyerWindow::showProfileInfo(const string& login)
 {
@@ -311,6 +382,11 @@ void buyerWindow::showProfileInfo(const string& login)
     ui->priceField->setVisible(false);
     ui->applyButton2->setVisible(false);
     ui->cancelButton->setVisible(false);
+    ui->cart->setVisible(true);
+    ui->cartButton->setVisible(true);
+    ui->buy->setVisible(false);
+    ui->remove->setVisible(false);
+    ui->shopNums->setVisible(false);
 
     ui->productInfo->setStyleSheet(
                 "QTextEdit {"
@@ -322,8 +398,13 @@ void buyerWindow::showProfileInfo(const string& login)
         );
         ui->productInfo->setPlainText(info);
         ui->productInfo->setVisible(true);
+        disconnect(ui->cartButton, &QPushButton::clicked, this, nullptr);
+        disconnect(ui->depositMoneyButton, &QPushButton::clicked, this, nullptr);
     connect(ui->depositMoneyButton, &QPushButton::clicked, this, [this,login]() mutable {
         depositMoney(login);
+    });
+    connect(ui->cartButton, &QPushButton::clicked, this, [this,login]() mutable {
+        cartShow(login);
     });
     connect(ui->checkProducts, &QPushButton::clicked, this, [this,login]() {
         ui->checkProducts->setVisible(false);
@@ -394,7 +475,7 @@ void buyerWindow::showAllProducts(const string& login)
         if (!line.empty())
         {
             Product product = Product::readFromFile(line);
-            if (Product::getOwner(product) != login) products.push_back(product);
+            if (Product::getOwner(product) != login && Product::getStatus(product) != 0) products.push_back(product);
         }
     }
     productsCheck(products,0, login);
@@ -454,6 +535,11 @@ void buyerWindow::showCategories(const string& login)
     ui->priceField->setVisible(false);
     ui->applyButton2->setVisible(false);
     ui->cancelButton->setVisible(false);
+    ui->cart->setVisible(false);
+    ui->cartButton->setVisible(false);
+    ui->buy->setVisible(false);
+    ui->remove->setVisible(false);
+    ui->shopNums->setVisible(false);
 
     QPixmap category1("C:/Users/ASUS/CLionProjects/untitled51/resources/categories/1.png");
     ui->categoryFrame->setPixmap(category1.scaled(ui->categoryFrame->size(), Qt::KeepAspectRatio, Qt::SmoothTransformation));
@@ -567,6 +653,12 @@ buyerWindow::buyerWindow(string login,QWidget *parent) :
     ui->priceField->setVisible(false);
     ui->applyButton2->setVisible(false);
     ui->cancelButton->setVisible(false);
+    ui->cart->setVisible(false);
+    ui->cartButton->setVisible(false);
+    ui->buy->setVisible(false);
+    ui->remove->setVisible(false);
+    ui->shopNums->setVisible(false);
+    ui->productInfo->setReadOnly(true);
 
     QPixmap bg("C:/Users/ASUS/CLionProjects/untitled51/resources/bg1.png");
     ui->background->setPixmap(bg.scaled(ui->background->size(), Qt::KeepAspectRatio, Qt::SmoothTransformation));
